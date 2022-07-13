@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.e_cartapp">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.ECartApp"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="31">
+        <activity
+            android:name=".activities.SearchActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ECartApp" />
+        <activity
+            android:name=".activities.CategorySearch"
+            android:exported="false"
+            android:theme="@style/Theme.ECartApp" />
+        <activity
+            android:name=".activities.Payment"
+            android:exported="false"
+            android:theme="@style/Theme.ECartApp" />
+        <activity
+            android:name=".utils.GoogleSignin"
+            android:exported="false" />
+        <activity
+            android:name=".activities.Forget"
+            android:exported="false"
+            android:theme="@style/Theme.ECartApp" />
+        <activity
+            android:name=".activities.Checkout"
+            android:exported="false"
+            android:theme="@style/Theme.ECartApp" />
+        <activity
+            android:name=".activities.CartActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ECartApp" />
+        <activity
+            android:name=".activities.Product_Detail"
+            android:exported="false"
+            android:parentActivityName=".activities.Home_Page"
+            android:theme="@style/Theme.ECartApp" />
+        <activity
+            android:name=".activities.SignUp_Page"
+            android:exported="false"
+            android:theme="@style/Theme.ECartApp" />
+        <activity
+            android:name=".activities.Login"
+            android:exported="false"
+            android:theme="@style/Theme.ECartApp" />
+        <activity
+            android:name=".activities.Home_Page"
+            android:exported="true"
+            android:theme="@style/Theme.ECartApp">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+    </application>
+
+</manifest>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 7.2.1" type="baseline" client="gradle" dependencies="false"
+    name="AGP (7.2.1)" variant="fatal" version="7.2.1">
+
+    <issue id="NotSibling"
+        message="`@+id/productImage` is not a sibling in the same `ConstraintLayout`"
+        errorLine1="        app:layout_constraintBottom_toTopOf=&quot;@+id/productImage&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location file="src/main/res/layout/activity_product_detail.xml" line="126" column="9" />
+    </issue>
+
+</issues>

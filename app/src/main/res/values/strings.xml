@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">E-Cart App</string>
+    <string name="inputName">Enter Your Name</string>
+    <string name="inputPassword">Enter Your Password</string>
+    <string name="inputEmail">Enter Your Email</string>
+    <string name="confirmPassword">Confirm Your Password</string>
+    <string name="illustration">illustration</string>
+    <string name="divider">divider</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_in_text">Sign In Text</string>
+    <string name="googleIcon">googleIcon</string>
+    <string name="categoryIcon">categoryIcon</string>
+    <string name="sample">TextView</string>
+    <string name="products_image">Products Image</string>
+    <string name="add_to_cart">Add To Cart</string>
+    <string name="Loading">Loading details...</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="inputPhone">Enter Phone Number</string>
+    <string name="inputPhoneNo">Enter Your Phone No.</string>
+    <string name="supportingText">Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum! Provident similique accusantium nemo autem. Veritatis obcaecati tenetur iure eius earum ut molestias architecto voluptate aliquam</string>
+    <string name="secondaryTitle">Lorem ipsum dolor sit amet consectetur adipisicing elit.</string>
+</resources>
