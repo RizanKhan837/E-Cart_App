@@ -68,11 +68,12 @@ public class SearchActivity extends AppCompatActivity {
                         Product product = new Product(
                                 object.getString("name"),
                                 Constants.PRODUCTS_IMAGE_URL + object.getString("image"),
-                                object.getString("status"),
                                 object.getDouble("price"),
                                 object.getDouble("price_discount"),
                                 object.getInt("id"),
-                                object.getInt("stock")
+                                object.getInt("stock"),
+                                object.getString("type"),
+                                object.getString("description")
                         );
                         products.add(product);
                         Log.e("err", "Stock " + product.getStock());

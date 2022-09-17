@@ -49,11 +49,11 @@
             android:parentActivityName=".activities.Home_Page"
             android:theme="@style/Theme.ECartApp" />
         <activity
-            android:name=".activities.SignUp_Page"
+            android:name=".activities.Login"
             android:exported="false"
             android:theme="@style/Theme.ECartApp" />
         <activity
-            android:name=".activities.Login"
+            android:name=".activities.SignUp_Page"
             android:exported="false"
             android:theme="@style/Theme.ECartApp" />
         <activity
@@ -62,7 +62,6 @@
             android:theme="@style/Theme.ECartApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

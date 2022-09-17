@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -73,22 +72,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
                 android:orientation="horizontal">
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/addToCartChip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checkable="true"
-                    android:text="Add To Cart"
-                    android:textSize="12sp"
-                    app:chipEndPadding="8dp"
-                    app:chipIcon="@drawable/cart_add"
-                    app:iconStartPadding="4dp"
-                    app:rippleColor="#10FFFFFF"
-                    app:textEndPadding="4dp"
-                    tools:ignore="TouchTargetSizeCheck" />
 
                 <TextView
                     android:id="@+id/price"
@@ -100,7 +87,7 @@
                     android:text="Rs. 0.0"
                     android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
                     android:textColor="#f56a4d"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
 
             </LinearLayout>
 

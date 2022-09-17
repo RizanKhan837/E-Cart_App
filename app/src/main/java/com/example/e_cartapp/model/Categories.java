@@ -1,15 +1,17 @@
 package com.example.e_cartapp.model;
 
 public class Categories {
-    private String name, icon, color, brief;
-    private int id;
+    private String name, image, color, type, id;
 
-    public Categories(String name, String icon, String color, String brief, int id) {
+
+    public Categories(String name, String image, String color, String type) {
         this.name = name;
-        this.icon = icon;
+        this.image = image;
         this.color = color;
-        this.brief = brief;
-        this.id = id;
+        this.type = type;
+    }
+    public Categories(){
+
     }
 
     public String getName() {
@@ -20,12 +22,12 @@ public class Categories {
         this.name = name;
     }
 
-    public String getIcon() {
-        return icon;
+    public String getImage() {
+        return image;
     }
 
-    public void setIcon(String icon) {
-        this.icon = icon;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getColor() {
@@ -36,19 +38,19 @@ public class Categories {
         this.color = color;
     }
 
-    public String getBrief() {
-        return brief;
+    public String getType() {
+        return type;
     }
 
-    public void setBrief(String brief) {
-        this.brief = brief;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 }

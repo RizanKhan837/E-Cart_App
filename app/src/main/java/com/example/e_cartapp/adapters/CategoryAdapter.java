@@ -41,14 +41,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         Categories category = categories.get(position);
         holder.binding.label.setText(Html.fromHtml(category.getName()));
         Glide.with(context)
-                .load(category.getIcon())
+                .load(category.getImage())
                 .into(holder.binding.image);
         holder.binding.cardView.setCardBackgroundColor(Color.parseColor(category.getColor()));
 
         holder.binding.cardView.setOnClickListener(v -> {
             Intent intent = new Intent(context, CategorySearch.class);
-            intent.putExtra("catId", category.getId());
-            intent.putExtra("name", Html.fromHtml(category.getName()));
+            intent.putExtra("type", category.getType());
             context.startActivity(intent);
         });
     }
