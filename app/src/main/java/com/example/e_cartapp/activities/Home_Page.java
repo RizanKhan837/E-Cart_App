@@ -82,7 +82,6 @@ public class Home_Page extends AppCompatActivity { // to inherit some methods i.
 
             @Override
             public void onButtonClicked(int buttonCode) {
-
             }
         });
 

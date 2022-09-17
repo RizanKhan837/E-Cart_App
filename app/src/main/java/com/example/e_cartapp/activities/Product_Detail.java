@@ -82,12 +82,13 @@ public class Product_Detail extends AppCompatActivity {
                 .into(binding.productImage);
 
         binding.cartIcon.setOnClickListener(v -> {
+            //binding.cartIcon.playAnimation();
             Intent intent = new Intent(this, com.example.e_cartapp.activities.CartActivity.class);
             intent.putExtra("discount", totalDiscount);
             startActivity(intent);
         });
         binding.backBtn.setOnClickListener(v -> {
-            super.onBackPressed();
+            finish();
         });
 
         binding.addToCartBtn.setOnClickListener(v -> {

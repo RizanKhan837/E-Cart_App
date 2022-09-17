@@ -43,9 +43,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         Glide.with(context)
                 .load(category.getImage())
                 .into(holder.binding.image);
-        holder.binding.cardView.setCardBackgroundColor(Color.parseColor(category.getColor()));
-
-        holder.binding.cardView.setOnClickListener(v -> {
+        //holder.binding.image.setBorderColor(Color.parseColor(category.getColor()));
+        holder.binding.image.setOnClickListener(v -> {
             Intent intent = new Intent(context, CategorySearch.class);
             intent.putExtra("type", category.getType());
             context.startActivity(intent);

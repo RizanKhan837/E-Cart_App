@@ -7,13 +7,12 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        android:layout_width="132dp"
-        android:layout_height="95dp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginBottom="5dp"
-        app:cardBackgroundColor="#F5E5FE"
-        app:cardCornerRadius="10dp"
+        app:cardCornerRadius="12dp"
         app:cardElevation="10dp"
         app:cardMaxElevation="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -34,9 +33,9 @@
                 android:layout_marginTop="5dp"
                 android:contentDescription="@string/categoryIcon"
                 android:padding="8dp"
-                android:scaleType="centerCrop"
+                android:fadingEdgeLength="2dp"
+                android:elevation="10dp"
                 android:src="@drawable/placeholder"
-                app:riv_oval="true"
                 tools:ignore="RtlHardcoded" />
 
             <TextView
@@ -44,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="2dp"
                 android:layout_marginEnd="3dp"
                 android:layout_marginBottom="3dp"
                 android:ellipsize="end"
@@ -53,8 +52,9 @@
                 android:maxLines="1"
                 android:text="@string/sample"
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
         </LinearLayout>
+
     </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
