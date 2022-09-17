@@ -2,6 +2,7 @@ package com.example.e_cartapp.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.e_cartapp.R;
+import com.example.e_cartapp.activities.CartActivity;
 import com.example.e_cartapp.databinding.CartItemsBinding;
 import com.example.e_cartapp.model.Product;
 import com.hishd.tinycart.model.Cart;
@@ -30,7 +32,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     public interface CartListener {
         public void onQuantityChanged();
-
         public void onDeleteItem();
     }
 
@@ -98,7 +99,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
         holder.binding.deleteItem.setOnClickListener(v -> {
             cart.removeItem(products.get(position));
-            notifyDataSetChanged();
+            products.remove(position);
             cartListener.onDeleteItem();
         });
     }

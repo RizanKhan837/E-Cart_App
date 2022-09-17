@@ -3,7 +3,6 @@ package com.example.e_cartapp.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -11,20 +10,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.e_cartapp.R;
 import com.example.e_cartapp.adapters.CategoryAdapter;
-import com.example.e_cartapp.adapters.ProductAdapter;
+import com.example.e_cartapp.adapters.PopularAdapter;
 import com.example.e_cartapp.databinding.ActivityHomePageBinding;
 import com.example.e_cartapp.model.Categories;
-import com.example.e_cartapp.model.Product;
-import com.example.e_cartapp.utils.Constants;
+import com.example.e_cartapp.model.PopularProducts;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -34,12 +26,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import org.imaginativeworld.whynotimagecarousel.model.CarouselItem;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -50,11 +42,12 @@ public class Home_Page extends AppCompatActivity { // to inherit some methods i.
     ActivityHomePageBinding binding;
     CategoryAdapter categoryAdapter;
     ArrayList<Categories> categories;
+    FirebaseFirestore db;
 
     GoogleSignInClient mGoogleSignInClient;
 
-    ProductAdapter productAdapter;
-    ArrayList<Product> products;
+    PopularAdapter productAdapter;
+    ArrayList<PopularProducts> products;
     String id, userName;
 
     @Override
@@ -65,6 +58,8 @@ public class Home_Page extends AppCompatActivity { // to inherit some methods i.
 
         id = getIntent().getStringExtra("id");
         userName = getIntent().getStringExtra("username");
+
+        db = FirebaseFirestore.getInstance();
 
         initCategories();
         initProducts();
@@ -115,7 +110,7 @@ public class Home_Page extends AppCompatActivity { // to inherit some methods i.
     }
 
     void getCategories() {
-        RequestQueue queue = Volley.newRequestQueue(this);
+        /*RequestQueue queue = Volley.newRequestQueue(this);
         StringRequest request = new StringRequest(Request.Method.GET, Constants.GET_CATEGORIES_URL, (Response.Listener<String>) response -> {
             try {
                 Log.e("response", response);
@@ -128,8 +123,7 @@ public class Home_Page extends AppCompatActivity { // to inherit some methods i.
                                 object.getString("name"),
                                 Constants.CATEGORIES_IMAGE_URL + object.getString("icon"),
                                 object.getString("color"),
-                                object.getString("brief"),
-                                object.getInt("id")
+                                object.getString("brief")
                         );
                         categories.add(category);
                     }
@@ -142,11 +136,27 @@ public class Home_Page extends AppCompatActivity { // to inherit some methods i.
             }
         }, error -> {
         });
-        queue.add(request);
+        queue.add(request);*/
+        db.collection("Categories")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Categories category = document.toObject(Categories.class);
+                                categories.add(category);
+                                categoryAdapter.notifyDataSetChanged();
+                            }
+                        } else {
+                            Toasty.error(Home_Page.this, "" + task.getException().getMessage(), Toast.LENGTH_SHORT, true).show();
+                        }
+                    }
+                });
     }
 
     void getProducts() {
-        RequestQueue queue = Volley.newRequestQueue(this);
+        /*RequestQueue queue = Volley.newRequestQueue(this);
         String url = Constants.GET_PRODUCTS_URL + "?count=8";
         StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
             try {
@@ -158,11 +168,12 @@ public class Home_Page extends AppCompatActivity { // to inherit some methods i.
                         Product product = new Product(
                                 object.getString("name"),
                                 Constants.PRODUCTS_IMAGE_URL + object.getString("image"),
-                                object.getString("status"),
                                 object.getDouble("price"),
                                 object.getDouble("price_discount"),
                                 object.getInt("id"),
-                                object.getInt("stock")
+                                object.getInt("stock"),
+                                object.getString("type"),
+                                object.getString("description")
                         );
                         products.add(product);
                         Log.e("err", "Stock " + product.getStock());
@@ -177,11 +188,28 @@ public class Home_Page extends AppCompatActivity { // to inherit some methods i.
         }, error -> {
 
         });
-        queue.add(request);
+        queue.add(request);*/
+        db.collection("PopularProducts")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                PopularProducts popularProducts = document.toObject(PopularProducts.class);
+                                //popularProducts.setId(document.getId());
+                                products.add(popularProducts);
+                                productAdapter.notifyDataSetChanged();
+                            }
+                        } else {
+                             Toasty.error(Home_Page.this, "" + task.getException().getMessage(), Toast.LENGTH_SHORT, true).show();
+                        }
+                    }
+                });
     }
 
     void getSlider() {
-        RequestQueue queue = Volley.newRequestQueue(this);
+        /*RequestQueue queue = Volley.newRequestQueue(this);
         StringRequest request = new StringRequest(Request.Method.GET, Constants.GET_OFFERS_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -210,12 +238,30 @@ public class Home_Page extends AppCompatActivity { // to inherit some methods i.
                 // Do Nothing
             }
         });
-        queue.add(request);
+        queue.add(request);*/
+        db.collection("Sliders")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                //String image = document.get("image").toString();
+                                binding.carousel.addData(new CarouselItem(
+                                        document.getString("image"), document.getString("title")
+                                        )
+                                );
+                            }
+                        } else {
+                            Toasty.error(Home_Page.this, "" + task.getException().getMessage(), Toast.LENGTH_SHORT, true).show();
+                        }
+                    }
+                });
     }
 
     void initProducts() {
         products = new ArrayList<>();
-        productAdapter = new ProductAdapter(this, products);
+        productAdapter = new PopularAdapter(this, products);
 
         getProducts();
 

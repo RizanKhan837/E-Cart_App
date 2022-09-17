@@ -1,5 +1,6 @@
 package com.example.e_cartapp.adapters;
 
+
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -13,20 +14,21 @@ import com.bumptech.glide.Glide;
 import com.example.e_cartapp.R;
 import com.example.e_cartapp.databinding.ActivityProductDetailBinding;
 import com.example.e_cartapp.databinding.ItemProductBinding;
+import com.example.e_cartapp.model.PopularProducts;
 import com.example.e_cartapp.model.Product;
 import com.hishd.tinycart.model.Cart;
 import com.hishd.tinycart.util.TinyCartHelper;
 
 import java.util.ArrayList;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
+public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.ProductViewHolder> {
     Context context;
-    ArrayList<Product> products;
+    ArrayList<PopularProducts> products;
     ActivityProductDetailBinding bind;
     Product currentProduct;
     Cart cart;
 
-    public ProductAdapter(Context context, ArrayList<Product> products) {
+    public PopularAdapter(Context context, ArrayList<PopularProducts> products) {
         this.context = context;
         this.products = products;
         cart = TinyCartHelper.getCart();
@@ -40,7 +42,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
-        Product product = products.get(position);
+        PopularProducts product = products.get(position);
         Glide.with(context)
                 .load(product.getImage())
                 .into(holder.binding.image);
@@ -51,23 +53,23 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             Intent intent = new Intent(context, com.example.e_cartapp.activities.Product_Detail.class);
             intent.putExtra("name", product.getName());
             intent.putExtra("image", product.getImage());
-            intent.putExtra("id", product.getId());
             intent.putExtra("price", product.getPrice());
             intent.putExtra("description", product.getDescription());
+            intent.putExtra("id", product.getId());
             context.startActivity(intent);
         });
 
-      /*  holder.binding.addToCartChip.setOnClickListener(v -> {
+       /* holder.binding.addToCartChip.setOnClickListener(v -> {
             holder.binding.addToCartChip.setChipIconVisible(false);
             holder.binding.addToCartChip.setCheckedIconVisible(true);
             holder.binding.addToCartChip.setText("Added");
-            cart.addItem(product, 1);
+            cart.addItem((Item) product, 1);
             notifyDataSetChanged();
         });
         holder.binding.addToCartChip.setOnCloseIconClickListener(v -> {
             holder.binding.addToCartChip.setCheckedIconVisible(false);
             holder.binding.addToCartChip.setChipIconVisible(true);
-            cart.removeItem(product);
+            cart.removeItem((Item) product);
             notifyDataSetChanged();
         });*/
     }

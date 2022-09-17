@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/HP/AndroidStudioProjects/ECartApp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1905" />
+        <entry key="..\:/Users/HP/AndroidStudioProjects/ECartApp/app/src/main/res/drawable/addtocart.xml" value="0.1685" />
         <entry key="..\:/Users/HP/AndroidStudioProjects/ECartApp/app/src/main/res/drawable/button.xml" value="0.1895" />
         <entry key="..\:/Users/HP/AndroidStudioProjects/ECartApp/app/src/main/res/drawable/cart_item.xml" value="0.1895" />
         <entry key="..\:/Users/HP/AndroidStudioProjects/ECartApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1905" />
@@ -17,7 +18,7 @@
         <entry key="..\:/Users/HP/AndroidStudioProjects/ECartApp/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/Users/HP/AndroidStudioProjects/ECartApp/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/Users/HP/AndroidStudioProjects/ECartApp/app/src/main/res/layout/activity_payment.xml" value="0.22" />
-        <entry key="..\:/Users/HP/AndroidStudioProjects/ECartApp/app/src/main/res/layout/activity_product_detail.xml" value="0.2" />
+        <entry key="..\:/Users/HP/AndroidStudioProjects/ECartApp/app/src/main/res/layout/activity_product_detail.xml" value="0.25" />
         <entry key="..\:/Users/HP/AndroidStudioProjects/ECartApp/app/src/main/res/layout/activity_search.xml" value="0.18229166666666666" />
         <entry key="..\:/Users/HP/AndroidStudioProjects/ECartApp/app/src/main/res/layout/activity_sign_up_page.xml" value="0.18229166666666666" />
         <entry key="..\:/Users/HP/AndroidStudioProjects/ECartApp/app/src/main/res/layout/cardview.xml" value="0.25" />

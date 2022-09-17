@@ -64,6 +64,7 @@ public class Checkout extends AppCompatActivity {
             Product product = (Product) item.getKey();
             int quantity = item.getValue();
             product.setQuantity(quantity);
+            product.setPrice(total);
             products.add(product);
         }
         adapter = new CheckoutAdapter(this, products);

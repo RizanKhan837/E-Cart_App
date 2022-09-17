@@ -1,34 +1,29 @@
 package com.example.e_cartapp.activities;
 
 import android.os.Bundle;
-import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.e_cartapp.adapters.ProductAdapter;
 import com.example.e_cartapp.databinding.ActivityCategorySearchBinding;
 import com.example.e_cartapp.model.Product;
-import com.example.e_cartapp.utils.Constants;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-
-import es.dmoral.toasty.Toasty;
 
 public class CategorySearch extends AppCompatActivity {
 
     ActivityCategorySearchBinding binding;
     ProductAdapter productAdapter;
     ArrayList<Product> products;
-    int catId;
+    FirebaseFirestore db;
+    String type;
     String title;
 
     @Override
@@ -36,8 +31,9 @@ public class CategorySearch extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityCategorySearchBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        catId = getIntent().getIntExtra("id", 0);
-        title = getIntent().getStringExtra("name");
+        db = FirebaseFirestore.getInstance();
+        type = getIntent().getStringExtra("type");
+        title = type.substring(0, 1).toUpperCase() + type.substring(1);
         binding.txtTitle.setText(title);
 
         initProducts();
@@ -51,15 +47,15 @@ public class CategorySearch extends AppCompatActivity {
         products = new ArrayList<>();
         productAdapter = new ProductAdapter(this, products);
 
-        getProducts(catId);
+        getProducts();
 
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         binding.categoryList.setLayoutManager(layoutManager);
         binding.categoryList.setAdapter(productAdapter);
     }
 
-    void getProducts(int id) {
-        RequestQueue queue = Volley.newRequestQueue(this);
+    void getProducts() {
+        /*RequestQueue queue = Volley.newRequestQueue(this);
         String url = Constants.GET_PRODUCTS_URL + "?category_id=" + id;
         StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
             try {
@@ -71,11 +67,12 @@ public class CategorySearch extends AppCompatActivity {
                         Product product = new Product(
                                 object.getString("name"),
                                 Constants.PRODUCTS_IMAGE_URL + object.getString("image"),
-                                object.getString("status"),
                                 object.getDouble("price"),
                                 object.getDouble("price_discount"),
                                 object.getInt("id"),
-                                object.getInt("stock")
+                                object.getInt("stock"),
+                                object.getString("type"),
+                                object.getString("description")
                         );
                         products.add(product);
                         Log.e("err", "Stock " + product.getStock());
@@ -90,7 +87,93 @@ public class CategorySearch extends AppCompatActivity {
             }
         }, error -> {
         });
-        queue.add(request);
+        queue.add(request);*/
+
+        //   Getting Clothes
+        if (type != null && type.equalsIgnoreCase("clothes")){
+            db.collection("Products").whereEqualTo("type", "clothes")
+                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    for (DocumentSnapshot snapshot : task.getResult().getDocuments()){
+                        Product product = snapshot.toObject(Product.class);
+                        products.add(product);
+                        productAdapter.notifyDataSetChanged();;
+                    }
+                }
+            });
+        }
+
+        //   Getting Electronics
+        if (type != null && type.equalsIgnoreCase("electronics")){
+            db.collection("Products").whereEqualTo("type", "electronics")
+                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            for (DocumentSnapshot snapshot : task.getResult().getDocuments()){
+                                Product product = snapshot.toObject(Product.class);
+                                products.add(product);
+                                productAdapter.notifyDataSetChanged();;
+                            }
+                        }
+                    });
+        }
+        //   Getting Clothes
+        if (type != null && type.equalsIgnoreCase("food")){
+            db.collection("Products").whereEqualTo("type", "food")
+                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            for (DocumentSnapshot snapshot : task.getResult().getDocuments()){
+                                Product product = snapshot.toObject(Product.class);
+                                products.add(product);
+                                productAdapter.notifyDataSetChanged();;
+                            }
+                        }
+                    });
+        }
+        //   Getting Clothes
+        if (type != null && type.equalsIgnoreCase("lifestyle")){
+            db.collection("Products").whereEqualTo("type", "lifestyle")
+                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            for (DocumentSnapshot snapshot : task.getResult().getDocuments()){
+                                Product product = snapshot.toObject(Product.class);
+                                products.add(product);
+                                productAdapter.notifyDataSetChanged();;
+                            }
+                        }
+                    });
+        }
+        //   Getting Clothes
+        if (type != null && type.equalsIgnoreCase("medicine")){
+            db.collection("Products").whereEqualTo("type", "medicine")
+                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            for (DocumentSnapshot snapshot : task.getResult().getDocuments()){
+                                Product product = snapshot.toObject(Product.class);
+                                products.add(product);
+                                productAdapter.notifyDataSetChanged();;
+                            }
+                        }
+                    });
+        }
+        //   Getting Clothes
+        if (type != null && type.equalsIgnoreCase("sports")){
+            db.collection("Products").whereEqualTo("type", "sports")
+                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            for (DocumentSnapshot snapshot : task.getResult().getDocuments()){
+                                Product product = snapshot.toObject(Product.class);
+                                products.add(product);
+                                productAdapter.notifyDataSetChanged();;
+                            }
+                        }
+                    });
+        }
     }
 
 }
