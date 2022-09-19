@@ -5,20 +5,16 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <androidx.cardview.widget.CardView
+    <soup.neumorphism.NeumorphCardView
         android:id="@+id/cardView"
-        android:layout_width="100dp"
+        style="@style/Widget.Neumorph.CardView"
+        android:layout_width="120dp"
+        android:theme="@style/Theme.App"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="5dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="10dp"
-        app:cardMaxElevation="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:neumorph_shadowElevation="3dp"
+        app:neumorph_shapeType="flat"
+        app:neumorph_shapeAppearance="@style/CustomShapeAppearance">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,9 +28,9 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:contentDescription="@string/categoryIcon"
-                android:padding="8dp"
-                android:fadingEdgeLength="2dp"
                 android:elevation="10dp"
+                android:fadingEdgeLength="2dp"
+                android:padding="8dp"
                 android:src="@drawable/placeholder"
                 tools:ignore="RtlHardcoded" />
 
@@ -55,6 +51,6 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+    </soup.neumorphism.NeumorphCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,194 +7,193 @@
     android:background="@color/grey"
     tools:context=".activities.Home_Page">
 
-    <io.ak1.BubbleTabBar
-        android:id="@+id/bubbleTabBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/cart_item"
-        android:elevation="10dp"
-        android:padding="7dp"
-        app:bubbletab_custom_font="@font/roboto"
-        app:bubbletab_horizontal_padding="20dp"
-        app:bubbletab_icon_padding="5sp"
-        app:bubbletab_icon_size="20dp"
-        app:bubbletab_menuResource="@menu/main_menu"
-        app:bubbletab_title_size="12sp"
-        app:bubbletab_vertical_padding="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+    <!-- <io.ak1.BubbleTabBar
+         android:id="@+id/bubbleTabBar"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:background="@drawable/cart_item"
+         android:elevation="10dp"
+         android:padding="7dp"
+         app:bubbletab_custom_font="@font/roboto"
+         app:bubbletab_horizontal_padding="20dp"
+         app:bubbletab_icon_padding="5sp"
+         app:bubbletab_icon_size="20dp"
+         app:bubbletab_menuResource="@menu/main_menu"
+         app:bubbletab_title_size="12sp"
+         app:bubbletab_vertical_padding="10dp"
+         app:layout_constraintBottom_toBottomOf="parent"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent">
 
-    </io.ak1.BubbleTabBar>
+     </io.ak1.BubbleTabBar> -->
 
-    <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="28dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+     <LinearLayout
+         android:id="@+id/linearLayout3"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginStart="28dp"
+         android:layout_marginTop="10dp"
+         android:layout_marginEnd="28dp"
+         android:orientation="vertical"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+         <androidx.constraintlayout.widget.ConstraintLayout
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/profileName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/roboto_medium"
-                android:text="Hi Rizan"
-                android:textColor="#ff3d00"
-                android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+             <TextView
+                 android:id="@+id/profileName"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="8dp"
+                 android:fontFamily="@font/roboto_medium"
+                 android:text="Hi Rizan"
+                 android:textColor="#ff3d00"
+                 android:textSize="20sp"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/profileEmail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:text="rizankhan837@gmail.com"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/profileName"
-                app:layout_constraintTop_toBottomOf="@+id/profileName" />
+             <TextView
+                 android:id="@+id/profileEmail"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginBottom="4dp"
+                 android:text="rizankhan837@gmail.com"
+                 android:textSize="16sp"
+                 app:layout_constraintBottom_toBottomOf="parent"
+                 app:layout_constraintStart_toStartOf="@+id/profileName"
+                 app:layout_constraintTop_toBottomOf="@+id/profileName" />
 
+             <com.makeramen.roundedimageview.RoundedImageView
+                 android:id="@+id/profileImage"
+                 android:layout_width="52dp"
+                 android:layout_height="52dp"
+                 android:scaleType="centerCrop"
+                 android:src="@drawable/profile"
+                 app:layout_constraintBottom_toBottomOf="@+id/profileEmail"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 app:layout_constraintTop_toTopOf="@+id/profileName"
+                 app:riv_border_color="#ff3d00"
+                 app:riv_border_width="2dip"
+                 app:riv_corner_radius="20dp"
+                 app:riv_mutate_background="true"
+                 app:riv_oval="true" />
+         </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <com.makeramen.roundedimageview.RoundedImageView
-                android:id="@+id/profileImage"
-                android:layout_width="52dp"
-                android:layout_height="52dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/profile"
-                app:layout_constraintBottom_toBottomOf="@+id/profileEmail"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/profileName"
-                app:riv_border_color="#ff3d00"
-                app:riv_border_width="2dip"
-                app:riv_corner_radius="20dp"
-                app:riv_mutate_background="true"
-                app:riv_oval="true" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+     </LinearLayout>
 
-    </LinearLayout>
+     <LinearLayout
+         android:id="@+id/linearLayout2"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginStart="14dp"
+         android:layout_marginEnd="14dp"
+         android:background="@color/grey"
+         android:orientation="vertical"
+         app:layout_constraintCircleRadius="20sp"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
-        android:layout_marginEnd="14dp"
-        android:background="@color/grey"
-        android:orientation="vertical"
-        app:layout_constraintCircleRadius="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+         <com.mancj.materialsearchbar.MaterialSearchBar
+             android:id="@+id/searchBar"
+             style="@style/MaterialSearchBarLight"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_gravity="center"
+             android:layout_marginBottom="10dp"
+             android:elevation="15dp"
+             android:padding="10dp"
+             app:mt_hint="Search Your Favourite"
+             app:mt_maxSuggestionsCount="10"
+             app:mt_navIconEnabled="true"
+             app:mt_placeholder="Search Products"
+             app:mt_roundedSearchBarEnabled="true"
+             app:mt_searchBarColor="#ffffff"
+             app:mt_searchIconDrawable="@drawable/search"
+             app:mt_textCursorTint="@color/black" />
 
-        <com.mancj.materialsearchbar.MaterialSearchBar
-            android:id="@+id/searchBar"
-            style="@style/MaterialSearchBarLight"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="10dp"
-            android:elevation="15dp"
-            android:padding="10dp"
-            app:mt_hint="Search Your Favourite"
-            app:mt_maxSuggestionsCount="10"
-            app:mt_navIconEnabled="true"
-            app:mt_placeholder="Search Products"
-            app:mt_roundedSearchBarEnabled="true"
-            app:mt_searchBarColor="#ffffff"
-            app:mt_searchIconDrawable="@drawable/search"
-            app:mt_textCursorTint="@color/black" />
+     </LinearLayout>
 
-    </LinearLayout>
+     <androidx.core.widget.NestedScrollView
+         android:id="@+id/nestedScrollView"
+         android:layout_width="match_parent"
+         android:layout_height="0dp"
+         android:fillViewport="true"
+         android:layout_marginBottom="4dp"
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:fillViewport="true"
-        android:layout_marginBottom="4dp"
+         app:layout_constraintBottom_toTopOf="@+id/bubbleTabBar"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
-        app:layout_constraintBottom_toTopOf="@+id/bubbleTabBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+             <androidx.cardview.widget.CardView
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginStart="20dp"
+                 android:layout_marginEnd="20dp"
+                 app:cardCornerRadius="10dp"
+                 app:cardElevation="10dp"
+                 app:cardMaxElevation="20dp">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="10dp"
-                app:cardMaxElevation="20dp">
+                 <org.imaginativeworld.whynotimagecarousel.ImageCarousel
+                     android:id="@+id/carousel"
+                     android:layout_width="match_parent"
+                     android:layout_height="200dp"
+                     app:autoPlay="true"
+                     app:imageScaleType="centerCrop"
+                     app:showBottomShadow="true"
+                     app:showCaption="false"
+                     app:showNavigationButtons="false" />
+             </androidx.cardview.widget.CardView>
 
-                <org.imaginativeworld.whynotimagecarousel.ImageCarousel
-                    android:id="@+id/carousel"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    app:autoPlay="true"
-                    app:imageScaleType="centerCrop"
-                    app:showBottomShadow="true"
-                    app:showCaption="false"
-                    app:showNavigationButtons="false" />
-            </androidx.cardview.widget.CardView>
+             <TextView
+                 android:id="@+id/txtCategories"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginStart="16dp"
+                 android:layout_marginTop="16dp"
+                 android:text="Categories"
+                 android:textColor="#000000"
+                 android:textSize="18sp"
+                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/txtCategories"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:text="Categories"
-                android:textColor="#000000"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+             <androidx.recyclerview.widget.RecyclerView
+                 android:id="@+id/categoriesList"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginStart="16dp"
+                 android:layout_marginTop="8dp"
+                 android:layout_marginEnd="16dp" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/categoriesList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp" />
+             <TextView
+                 android:id="@+id/txtProducts"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginStart="16dp"
+                 android:layout_marginTop="16dp"
+                 android:text="Popular"
+                 android:textColor="#000000"
+                 android:textSize="18sp"
+                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/txtProducts"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:text="Popular"
-                android:textColor="#000000"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+             <androidx.recyclerview.widget.RecyclerView
+                 android:id="@+id/productList"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginStart="16dp"
+                 android:layout_marginTop="8dp"
+                 android:layout_marginEnd="16dp"
+                 android:layout_marginBottom="8dp" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/productList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp" />
+         </LinearLayout>
+     </androidx.core.widget.NestedScrollView>
 
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+ </androidx.constraintlayout.widget.ConstraintLayout>

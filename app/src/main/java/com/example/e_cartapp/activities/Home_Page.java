@@ -3,6 +3,8 @@ package com.example.e_cartapp.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,6 +25,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -36,6 +39,7 @@ import org.imaginativeworld.whynotimagecarousel.model.CarouselItem;
 import java.util.ArrayList;
 
 import es.dmoral.toasty.Toasty;
+import io.ak1.OnBubbleClickListener;
 
 public class Home_Page extends AppCompatActivity { // to inherit some methods i.e., onCreate(), setContentView() etc
 
@@ -48,7 +52,9 @@ public class Home_Page extends AppCompatActivity { // to inherit some methods i.
 
     PopularAdapter productAdapter;
     ArrayList<PopularProducts> products;
-    String id, userName;
+    String personName, personEmail, id, userName, personPhone;
+    Uri personPhoto;
+   // BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +64,8 @@ public class Home_Page extends AppCompatActivity { // to inherit some methods i.
 
         id = getIntent().getStringExtra("id");
         userName = getIntent().getStringExtra("username");
+
+        //bottomNavigationView = (BottomNavigationView) binding.bubbleTabBar.getRootView();
 
         db = FirebaseFirestore.getInstance();
 
@@ -85,6 +93,38 @@ public class Home_Page extends AppCompatActivity { // to inherit some methods i.
             }
         });
 
+        /*binding.bubbleTabBar.addBubbleListener(new OnBubbleClickListener() {
+            @Override
+            public void onBubbleClick(int i) {
+                switch (i){
+                    case R.id.home:
+                        break;
+                    case R.id.search:
+                        binding.searchBar.openSearch();
+                        break;
+                    case R.id.cart:
+                        Toasty.warning(getApplicationContext(), "Go to Cart", Toast.LENGTH_SHORT, true).show();
+                        break;
+                    case R.id.user:
+                        finish();
+                        Intent intent = new Intent(Home_Page.this, SearchActivity.class);
+                        overridePendingTransition(0,0);
+                        startActivity(intent);
+                        break;
+                }
+            }
+        });*/
+
+        binding.profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Home_Page.this, SearchActivity.class);
+                intent.putExtra("name", personName);
+                intent.putExtra("email", personEmail);
+                intent.putExtra("photo", personPhoto);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initSlider() {
@@ -277,9 +317,9 @@ public class Home_Page extends AppCompatActivity { // to inherit some methods i.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
         if (acct != null) {
-            String personName = acct.getDisplayName();
-            String personEmail = acct.getEmail();
-            Uri personPhoto = acct.getPhotoUrl();
+            personName = acct.getDisplayName();
+            personEmail = acct.getEmail();
+            personPhoto = acct.getPhotoUrl();
             binding.profileName.setText(personName);
             binding.profileEmail.setText(personEmail);
             Glide.with(this)

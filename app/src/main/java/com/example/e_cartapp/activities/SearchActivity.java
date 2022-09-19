@@ -50,8 +50,8 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         query = getIntent().getStringExtra("query");
-        title = query.substring(0, 1).toUpperCase() + query.substring(1);
         binding.txtTitle.setText(title);
+
         db = FirebaseFirestore.getInstance();
 
         initProducts();
