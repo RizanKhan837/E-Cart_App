@@ -3,6 +3,7 @@ package com.example.e_cartapp.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ import com.example.e_cartapp.adapters.PopularAdapter;
 import com.example.e_cartapp.databinding.ActivityHomePageBinding;
 import com.example.e_cartapp.model.Categories;
 import com.example.e_cartapp.model.PopularProducts;
+import com.example.e_cartapp.model.UserModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -33,22 +35,27 @@ import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import org.imaginativeworld.whynotimagecarousel.model.CarouselItem;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import es.dmoral.toasty.Toasty;
 
-public class Home_Page extends AppCompatActivity { // to inherit some methods i.e., onCreate(), setContentView() etc
+public class Home_Page extends AppCompatActivity implements Serializable { // to inherit some methods i.e., onCreate(), setContentView() etc
 
     ActivityHomePageBinding binding;
     CategoryAdapter categoryAdapter;
     ArrayList<Categories> categories;
     FirebaseFirestore db;
+    FirebaseDatabase database;
 
     GoogleSignInClient mGoogleSignInClient;
 
     PopularAdapter productAdapter;
     ArrayList<PopularProducts> products;
-    String id, userName;
+    UserModel userModel;
+    String personName, personEmail, id, userName, personPhone;
+    Uri personPhoto;
+   // BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,16 +63,34 @@ public class Home_Page extends AppCompatActivity { // to inherit some methods i.
         binding = ActivityHomePageBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());   // // is used fill the window with the UI provided from layout file
 
-        id = getIntent().getStringExtra("id");
-        userName = getIntent().getStringExtra("username");
+        id = getIntent().getStringExtra("uid");
+        personEmail = getIntent().getStringExtra("email");
+
+        //bottomNavigationView = (BottomNavigationView) binding.bubbleTabBar.getRootView();
 
         db = FirebaseFirestore.getInstance();
+        database = FirebaseDatabase.getInstance();
 
         initCategories();
         initProducts();
         initSlider();
         googleSignIn();
-        getFirebaseDatabase(id);
+        getFirebaseDatabase();
+
+        if (userModel.equals(null)){
+            Toasty.warning(Home_Page.this, "User Doesn't Exist" , Toast.LENGTH_SHORT, true).show();
+        }
+        if (!userModel.getName().isEmpty()){
+            binding.profileName.setText(userModel.getName());
+        }
+        if (!userModel.getEmail().isEmpty()){
+            binding.profileEmail.setText(userModel.getEmail());
+        }
+        if (userModel.getProfileUrl() != null){
+            Glide.with(this)
+                    .load(String.valueOf(userModel.getProfileUrl()))
+                    .into(binding.profileImage);
+        }
 
         binding.searchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
             @Override
@@ -82,10 +107,39 @@ public class Home_Page extends AppCompatActivity { // to inherit some methods i.
 
             @Override
             public void onButtonClicked(int buttonCode) {
-
             }
         });
 
+        /*binding.bubbleTabBar.addBubbleListener(new OnBubbleClickListener() {
+            @Override
+            public void onBubbleClick(int i) {
+                switch (i){
+                    case R.id.home:
+                        break;
+                    case R.id.search:
+                        binding.searchBar.openSearch();
+                        break;
+                    case R.id.cart:
+                        Toasty.warning(getApplicationContext(), "Go to Cart", Toast.LENGTH_SHORT, true).show();
+                        break;
+                    case R.id.user:
+                        finish();
+                        Intent intent = new Intent(Home_Page.this, SearchActivity.class);
+                        overridePendingTransition(0,0);
+                        startActivity(intent);
+                        break;
+                }
+            }
+        });*/
+
+        binding.profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Home_Page.this, Profile.class);
+                intent.putExtra("username", userModel.getName());
+                startActivity(intent);
+            }
+        });
     }
 
     private void initSlider() {
@@ -278,29 +332,32 @@ public class Home_Page extends AppCompatActivity { // to inherit some methods i.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
         if (acct != null) {
-            String personName = acct.getDisplayName();
-            String personEmail = acct.getEmail();
-            Uri personPhoto = acct.getPhotoUrl();
-            binding.profileName.setText(personName);
-            binding.profileEmail.setText(personEmail);
+                userModel = new UserModel(
+                        acct.getDisplayName(),
+                        acct.getEmail(),
+                        "+XX XXX XXXXXXX",
+                        "House # 1234 Your Town Etc",
+                        "City",
+                        "Country",
+                        acct.getPhotoUrl());
+            database.getReference("Users").child(id).setValue(userModel);
+            binding.profileName.setText(userModel.getName());
+            binding.profileEmail.setText(userModel.getEmail());
             Glide.with(this)
-                    .load(String.valueOf(personPhoto))
+                    .load(String.valueOf(userModel.getProfileUrl()))
                     .into(binding.profileImage);
         }
     }
 
-    void getFirebaseDatabase(String id) {
-
-        if (id != null) {
-            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
-            reference.child(id).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+    void getFirebaseDatabase() {
+            database.getReference("Users").child(id)
+                    .get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DataSnapshot> task) {
                     if (task.isSuccessful()) {
                         if (task.getResult().exists()) {
                             DataSnapshot dataSnapshot = task.getResult();
-                            binding.profileName.setText(String.valueOf(dataSnapshot.child("name").getValue()));
-                            binding.profileEmail.setText(String.valueOf(dataSnapshot.child("email").getValue()));
+                            userModel = dataSnapshot.getValue(UserModel.class);
                         } else {
                             Toasty.error(Home_Page.this, "" + task.getException().getMessage(), Toast.LENGTH_SHORT, true).show();
                         }
@@ -309,6 +366,5 @@ public class Home_Page extends AppCompatActivity { // to inherit some methods i.
                     }
                 }
             });
-        }
     }
 }

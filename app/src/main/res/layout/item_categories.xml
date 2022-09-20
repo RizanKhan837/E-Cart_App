@@ -5,21 +5,16 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <androidx.cardview.widget.CardView
+    <soup.neumorphism.NeumorphCardView
         android:id="@+id/cardView"
-        android:layout_width="132dp"
-        android:layout_height="95dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="5dp"
-        app:cardBackgroundColor="#F5E5FE"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="10dp"
-        app:cardMaxElevation="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        style="@style/Widget.Neumorph.CardView"
+        android:layout_width="120dp"
+        android:theme="@style/Theme.App"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:neumorph_shadowElevation="3dp"
+        app:neumorph_shapeType="flat"
+        app:neumorph_shapeAppearance="@style/CustomShapeAppearance">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,10 +28,10 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:contentDescription="@string/categoryIcon"
+                android:elevation="10dp"
+                android:fadingEdgeLength="2dp"
                 android:padding="8dp"
-                android:scaleType="centerCrop"
                 android:src="@drawable/placeholder"
-                app:riv_oval="true"
                 tools:ignore="RtlHardcoded" />
 
             <TextView
@@ -44,7 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="2dp"
                 android:layout_marginEnd="3dp"
                 android:layout_marginBottom="3dp"
                 android:ellipsize="end"
@@ -53,8 +48,9 @@
                 android:maxLines="1"
                 android:text="@string/sample"
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+
+    </soup.neumorphism.NeumorphCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

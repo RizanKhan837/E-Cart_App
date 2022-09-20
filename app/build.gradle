@@ -88,4 +88,7 @@ dependencies {
 
     /* Bottom Navigation  */
     implementation 'io.ak1:bubbletabbar:1.0.8'
+
+    /* Neu-morphism  */
+    implementation 'com.github.fornewid:neumorphism:0.3.2'
 }

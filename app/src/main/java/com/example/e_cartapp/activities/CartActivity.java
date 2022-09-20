@@ -48,8 +48,8 @@ public class CartActivity extends AppCompatActivity {
         if (cart.isCartEmpty()) {
             binding.cartList.setVisibility(View.GONE);
             binding.emptyCartAnim.setVisibility(View.VISIBLE);
-            binding.totalPrice.setText(0);
-            binding.subTotal.setText(0);
+            binding.totalPrice.setText(cart.getTotalPrice().toString());
+            binding.subTotal.setText(cart.getTotalPrice().toString());
         }
         // getAllItemsWithQty returns a map
 

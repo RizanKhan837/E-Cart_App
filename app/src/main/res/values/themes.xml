@@ -4,7 +4,7 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">#f56a4d</item>
         <item name="colorPrimaryVariant">#feefec</item>
-        <item name="colorOnPrimary">#ffffff</item>
+        <item name="colorOnPrimary">#efeeee</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
@@ -14,4 +14,30 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="Theme.App" parent="Base.Theme.Neumorph.Light">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_200</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_200</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="CustomShapeAppearance">
+        <item name="neumorph_cornerFamily">rounded</item>
+        <item name="neumorph_cornerSize">24dp</item>
+
+        <!-- Or if wants different radii depending on the corner. -->
+        <item name="neumorph_cornerSizeTopLeft">12dp</item>
+        <item name="neumorph_cornerSizeTopRight">12dp</item>
+        <item name="neumorph_cornerSizeBottomLeft">12dp</item>
+        <item name="neumorph_cornerSizeBottomRight">12dp</item>
+    </style>
+
 </resources>
+<!-- Base application theme. -->

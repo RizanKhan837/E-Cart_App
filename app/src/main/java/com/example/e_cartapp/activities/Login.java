@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.e_cartapp.databinding.ActivityLoginBinding;
+import com.example.e_cartapp.model.UserModel;
 import com.example.e_cartapp.utils.GoogleSignin;
 import com.example.e_cartapp.utils.LoadingDialog;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -16,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 import es.dmoral.toasty.Toasty;
 
@@ -24,7 +26,9 @@ public class Login extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseUser mUser;
     String useremail, userpassword;
+    FirebaseDatabase database;
     LoadingDialog loading;
+    UserModel userModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +38,7 @@ public class Login extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         mUser = auth.getCurrentUser();
+        database = FirebaseDatabase.getInstance();
 
         loading = new LoadingDialog(Login.this, "Signing In");
 
@@ -73,7 +78,11 @@ public class Login extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toasty.success(Login.this, "Logged In Successfully!", Toast.LENGTH_SHORT, true).show();
-                            startActivity(new Intent(Login.this, Home_Page.class));
+                            Intent intent = new Intent(Login.this, Home_Page.class);
+                            intent.putExtra("username", task.getResult().getUser().getDisplayName());
+                            intent.putExtra("email", task.getResult().getUser().getEmail());
+                            intent.putExtra("uid", task.getResult().getUser().getUid());
+                            startActivity(intent);
                             loading.dismiss();
                         } else {
                             Toasty.error(Login.this, "" + task.getException().getMessage(), Toast.LENGTH_SHORT, true).show();

@@ -1,34 +1,32 @@
 package com.example.e_cartapp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.e_cartapp.adapters.ProductAdapter;
 import com.example.e_cartapp.databinding.ActivitySearchBinding;
 import com.example.e_cartapp.model.Product;
-import com.example.e_cartapp.utils.Constants;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-
-import es.dmoral.toasty.Toasty;
 
 public class SearchActivity extends AppCompatActivity {
 
     ActivitySearchBinding binding;
     ProductAdapter productAdapter;
     ArrayList<Product> products;
+    FirebaseFirestore db;
     String query;
+    String title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +35,13 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         query = getIntent().getStringExtra("query");
-        binding.txtTitle.setText(query);
+        binding.txtTitle.setText(title);
 
+        db = FirebaseFirestore.getInstance();
+
+        initProducts();
         binding.backBtn.setOnClickListener(v -> {
-            finish();
+            startActivity(new Intent(SearchActivity.this, Home_Page.class));
         });
     }
 
@@ -56,7 +57,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     void getProducts(String query) {
-        RequestQueue queue = Volley.newRequestQueue(this);
+       /* RequestQueue queue = Volley.newRequestQueue(this);
         String url = Constants.GET_PRODUCTS_URL + "?q=" + query;
         StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
             try {
@@ -88,6 +89,26 @@ public class SearchActivity extends AppCompatActivity {
             }
         }, error -> {
         });
-        queue.add(request);
+        queue.add(request);*/
+
+        db.collection("Products")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        for (DocumentSnapshot snapshot : task.getResult().getDocuments()){
+                            Product product = snapshot.toObject(Product.class);
+                            String name = product.getName().toLowerCase();
+                            if (name.contains(query.toLowerCase())){
+                                products.add(product);
+                                productAdapter.notifyDataSetChanged();
+                            }
+                        }
+                        if (products.isEmpty()){
+                            binding.animationView.setVisibility(View.VISIBLE);
+                            binding.txtEmpty.setVisibility(View.VISIBLE);
+                            binding.searchList.setVisibility(View.GONE);
+                        }
+                    }
+                });
     }
 }
