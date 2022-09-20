@@ -11,6 +11,7 @@ import com.example.e_cartapp.R;
 import com.example.e_cartapp.activities.Home_Page;
 import com.example.e_cartapp.activities.Login;
 import com.example.e_cartapp.databinding.ActivityGoogleSigninBinding;
+import com.example.e_cartapp.model.UserModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -23,6 +24,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.FirebaseDatabase;
 
 import es.dmoral.toasty.Toasty;
 
@@ -32,7 +34,9 @@ public class GoogleSignin extends Login {
     private static final int RC_SIGN_IN = 101;
     GoogleSignInClient mGoogleSignInClient;
     FirebaseAuth mAuth;
-    FirebaseUser mUser;
+    FirebaseUser currentUser;
+    FirebaseDatabase database;
+    UserModel userModel;
     LoadingDialog loadingDialog;
 
     @Override
@@ -43,13 +47,19 @@ public class GoogleSignin extends Login {
 
         loadingDialog = new LoadingDialog(GoogleSignin.this, "Google Sign In...");
         loadingDialog.show();
+        database = FirebaseDatabase.getInstance();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
+        currentUser = mAuth.getCurrentUser();
+
+        if (currentUser!= null){
+            startActivity(new Intent(GoogleSignin.this, Home_Page.class));
+        }
+
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -63,17 +73,11 @@ public class GoogleSignin extends Login {
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account.getIdToken());
-                 /*account = GoogleSignIn.getLastSignedInAccount(this);
+                 account = GoogleSignIn.getLastSignedInAccount(this);
                 firebaseAuthWithGoogle(account.getIdToken());
 
-                if(account != null){
-                    String personName=account.getDisplayName();
-                    String personEmail=account.getEmail();
-                    String personId=account.getId();
-                    Uri personPhoto=account.getPhotoUrl();
-                }
-                startActivity(new Intent(GoogleSignin.this, Home_Page.class));*/
-                Toasty.success(GoogleSignin.this, "Success!", Toast.LENGTH_SHORT, true).show();
+                startActivity(new Intent(GoogleSignin.this, Home_Page.class));
+                //Toasty.success(GoogleSignin.this, "Success!", Toast.LENGTH_SHORT, true).show();
                 loadingDialog.dismiss();
             } catch (ApiException e) {
                 Toasty.error(GoogleSignin.this, "" + e.getMessage(), Toast.LENGTH_SHORT, true).show();
@@ -91,7 +95,10 @@ public class GoogleSignin extends Login {
                 if (task.isSuccessful()) {
                     // Sign in success, update UI with the signed-in user's information
                     FirebaseUser user = mAuth.getCurrentUser();
-                    updateUI(user);
+                    Intent intent = new Intent(GoogleSignin.this, Home_Page.class);
+                    intent.putExtra("email", user.getEmail());
+                    intent.putExtra("uid", user.getUid());
+                    startActivity(intent);
                     Toasty.success(GoogleSignin.this, "Success!", Toast.LENGTH_SHORT, true).show();
                 } else {
                     // If sign in fails, display a message to the user.
@@ -104,6 +111,7 @@ public class GoogleSignin extends Login {
 
     private void updateUI(FirebaseUser user) {
         startActivity(new Intent(GoogleSignin.this, Home_Page.class));
+        user.getDisplayName();
     }
 
 }

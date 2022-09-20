@@ -4,23 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.google.android.material.card.MaterialCardView
+    <soup.neumorphism.NeumorphCardView
         android:id="@+id/itemView"
-        style="@style/Widget.Material3.CardView.Filled"
+        style="@style/Widget.Neumorph.CardView"
         android:layout_width="match_parent"
+        android:theme="@style/Theme.App"
         android:layout_height="wrap_content"
-        android:elevation="10dp"
-        android:layout_margin="8dp"
-        app:cardCornerRadius="10dp"
-        android:checkable="true"
-        android:outlineAmbientShadowColor="#fff0e8"
-        android:outlineSpotShadowColor="@color/shrine_pink_700"
-        app:cardBackgroundColor="@color/shrine_pink_light"
-        app:checkedIcon="@drawable/cart"
         app:layout_constraintEnd_toEndOf="parent"
+        app:neumorph_shadowElevation="4dp"
+        android:padding="0dp"
+        app:neumorph_shapeType="flat"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:strokeColor="@color/shrine_pink_700">
+        app:neumorph_shapeAppearance="@style/CustomShapeAppearance">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,7 +27,7 @@
             <ImageView
                 android:id="@+id/image"
                 android:layout_width="match_parent"
-                android:layout_height="160dp"
+                android:layout_height="150dp"
                 android:contentDescription="Image"
                 android:scaleType="centerCrop"
                 android:src="@drawable/placeholder" />
@@ -40,7 +36,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="14dp">
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp">
 
                 <!-- Title, secondary and supporting text -->
                 <TextView
@@ -57,7 +56,7 @@
                     android:id="@+id/txtDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
                     android:layout_marginEnd="4dp"
                     android:ellipsize="end"
                     android:maxLines="1"
@@ -82,7 +81,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="8dp"
                     android:gravity="start"
                     android:text="Rs. 0.0"
                     android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
@@ -92,6 +92,6 @@
             </LinearLayout>
 
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+    </soup.neumorphism.NeumorphCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -86,14 +86,17 @@ public class SignUp_Page extends AppCompatActivity {
                     userModel = new UserModel(
                             binding.userName.getText().toString(),
                             binding.email.getText().toString(),
-                            binding.password.getText().toString(),
-                            binding.phone.getText().toString());
-                    String id = task.getResult().getUser().getUid();
-                    database.getReference().child("Users").child(id).setValue(userModel);
+                            binding.phone.getText().toString(),
+                            "House # 1234 Your Town Etc",
+                            "City",
+                            "Country",
+                            null
+                            );
+                    database.getReference("Users").child(task.getResult().getUser().getUid()).setValue(userModel);
                     Toasty.success(SignUp_Page.this, "Registration Successful", Toast.LENGTH_SHORT, true).show();
                     Intent intent = new Intent(SignUp_Page.this, Home_Page.class);
-                    intent.putExtra("id", id);
-                    intent.putExtra("username", binding.userName.getText().toString());
+                    intent.putExtra("email", task.getResult().getUser().getEmail());
+                    intent.putExtra("uid", task.getResult().getUser().getUid());
                     startActivity(intent);
                     loadingDialog.dismiss();
                 } else {
