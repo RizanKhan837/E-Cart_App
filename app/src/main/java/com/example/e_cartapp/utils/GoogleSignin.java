@@ -96,8 +96,10 @@ public class GoogleSignin extends Login {
                     // Sign in success, update UI with the signed-in user's information
                     FirebaseUser user = mAuth.getCurrentUser();
                     Intent intent = new Intent(GoogleSignin.this, Home_Page.class);
+
+                    user.getUid();
                     intent.putExtra("email", user.getEmail());
-                    intent.putExtra("uid", user.getUid());
+                    intent.putExtra("uid", userModel.getId());
                     startActivity(intent);
                     Toasty.success(GoogleSignin.this, "Success!", Toast.LENGTH_SHORT, true).show();
                 } else {

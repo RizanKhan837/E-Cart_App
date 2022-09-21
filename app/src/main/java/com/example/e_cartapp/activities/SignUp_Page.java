@@ -1,6 +1,7 @@
 package com.example.e_cartapp.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -29,6 +30,8 @@ public class SignUp_Page extends AppCompatActivity {
     FirebaseUser mUser;
     UserModel userModel;
     LoadingDialog loadingDialog;
+
+    public static String USER_ID = "com.example.e_cartapp.activities.userId";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,11 +95,18 @@ public class SignUp_Page extends AppCompatActivity {
                             "Country",
                             null
                             );
-                    database.getReference("Users").child(task.getResult().getUser().getUid()).setValue(userModel);
+                    String id = task.getResult().getUser().getUid();
+
+                    SharedPreferences.Editor sharedPreferences = getSharedPreferences(USER_ID, MODE_PRIVATE).edit();
+
+                    sharedPreferences.putString("id", id);
+                    sharedPreferences.putString("email", binding.email.getText().toString());
+                    sharedPreferences.putString("password", binding.password.getText().toString());
+                    sharedPreferences.apply();
+
+                    database.getReference("Users").child(id).setValue(userModel);
                     Toasty.success(SignUp_Page.this, "Registration Successful", Toast.LENGTH_SHORT, true).show();
                     Intent intent = new Intent(SignUp_Page.this, Home_Page.class);
-                    intent.putExtra("email", task.getResult().getUser().getEmail());
-                    intent.putExtra("uid", task.getResult().getUser().getUid());
                     startActivity(intent);
                     loadingDialog.dismiss();
                 } else {

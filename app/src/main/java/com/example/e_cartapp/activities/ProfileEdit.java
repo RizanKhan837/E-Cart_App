@@ -1,12 +1,17 @@
 package com.example.e_cartapp.activities;
 
+import static com.example.e_cartapp.activities.SignUp_Page.USER_ID;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.e_cartapp.databinding.ActivityProfileEditBinding;
 import com.example.e_cartapp.model.UserModel;
+import com.google.firebase.database.FirebaseDatabase;
 
 import es.dmoral.toasty.Toasty;
 
@@ -14,12 +19,38 @@ public class ProfileEdit extends AppCompatActivity {
 
     ActivityProfileEditBinding binding;
     UserModel userModel;
+    FirebaseDatabase database;
+    String id;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityProfileEditBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        SharedPreferences preferences = getSharedPreferences(USER_ID, MODE_PRIVATE);
+        id = preferences.getString("id", null);
+
+        database = FirebaseDatabase.getInstance();
+
+        binding.saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditUser();
+            }
+        });
+
+        binding.backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+    }
+
+    void EditUser(){
         if (binding.userName.getText().toString().isEmpty()) {
             Toasty.warning(ProfileEdit.this, "Please enter your name!", Toast.LENGTH_SHORT, true).show();
             return;
@@ -53,6 +84,8 @@ public class ProfileEdit extends AppCompatActivity {
                     binding.country.getText().toString(),
                     null
             );
+            database.getReference("Users").child(id).setValue(userModel);
+            Toasty.success(ProfileEdit.this, "Editing Successful", Toast.LENGTH_SHORT, true).show();
         }
     }
 }
