@@ -1,6 +1,9 @@
 package com.example.e_cartapp.activities;
 
+import static com.example.e_cartapp.activities.SignUp_Page.USER_ID;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -26,7 +29,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -53,7 +55,7 @@ public class Home_Page extends AppCompatActivity implements Serializable { // to
     PopularAdapter productAdapter;
     ArrayList<PopularProducts> products;
     UserModel userModel;
-    String personName, personEmail, id, userName, personPhone;
+    String id, userName, personPhone;
     Uri personPhoto;
    // BottomNavigationView bottomNavigationView;
 
@@ -63,34 +65,20 @@ public class Home_Page extends AppCompatActivity implements Serializable { // to
         binding = ActivityHomePageBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());   // // is used fill the window with the UI provided from layout file
 
-        id = getIntent().getStringExtra("uid");
-        personEmail = getIntent().getStringExtra("email");
 
         //bottomNavigationView = (BottomNavigationView) binding.bubbleTabBar.getRootView();
 
         db = FirebaseFirestore.getInstance();
         database = FirebaseDatabase.getInstance();
 
+        SharedPreferences preferences = getSharedPreferences(USER_ID, MODE_PRIVATE);
+        id = preferences.getString("id", null);
+
         initCategories();
         initProducts();
         initSlider();
         googleSignIn();
         getFirebaseDatabase();
-
-        if (userModel.equals(null)){
-            Toasty.warning(Home_Page.this, "User Doesn't Exist" , Toast.LENGTH_SHORT, true).show();
-        }
-        if (!userModel.getName().isEmpty()){
-            binding.profileName.setText(userModel.getName());
-        }
-        if (!userModel.getEmail().isEmpty()){
-            binding.profileEmail.setText(userModel.getEmail());
-        }
-        if (userModel.getProfileUrl() != null){
-            Glide.with(this)
-                    .load(String.valueOf(userModel.getProfileUrl()))
-                    .into(binding.profileImage);
-        }
 
         binding.searchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
             @Override
@@ -340,9 +328,21 @@ public class Home_Page extends AppCompatActivity implements Serializable { // to
                         "City",
                         "Country",
                         acct.getPhotoUrl());
+
+            String id = acct.getId();
+
+            if (id != null){
+                SharedPreferences.Editor sharedPreferences = getSharedPreferences(USER_ID, MODE_PRIVATE).edit();
+
+                sharedPreferences.putString("id", id);
+                sharedPreferences.apply();
+            }
+            assert id != null;
             database.getReference("Users").child(id).setValue(userModel);
+
             binding.profileName.setText(userModel.getName());
             binding.profileEmail.setText(userModel.getEmail());
+
             Glide.with(this)
                     .load(String.valueOf(userModel.getProfileUrl()))
                     .into(binding.profileImage);
@@ -350,21 +350,37 @@ public class Home_Page extends AppCompatActivity implements Serializable { // to
     }
 
     void getFirebaseDatabase() {
+        if (id!=null){
             database.getReference("Users").child(id)
                     .get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        if (task.getResult().exists()) {
-                            DataSnapshot dataSnapshot = task.getResult();
-                            userModel = dataSnapshot.getValue(UserModel.class);
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            if (task.getResult().exists()) {
+                                DataSnapshot dataSnapshot = task.getResult();
+                                userModel = dataSnapshot.getValue(UserModel.class);
+
+                                binding.profileName.setText(userModel.getName());
+                                binding.profileEmail.setText(userModel.getEmail());
+
+                                if (userModel.getProfileUrl() != null){
+                                    Glide.with(Home_Page.this)
+                                            .load(String.valueOf(userModel.getProfileUrl()))
+                                            .into(binding.profileImage);
+                                }
+
+                            } else {
+                                Toasty.error(Home_Page.this, "" + task.getException().getMessage(), Toast.LENGTH_SHORT, true).show();
+                            }
                         } else {
                             Toasty.error(Home_Page.this, "" + task.getException().getMessage(), Toast.LENGTH_SHORT, true).show();
                         }
-                    } else {
-                        Toasty.error(Home_Page.this, "" + task.getException().getMessage(), Toast.LENGTH_SHORT, true).show();
                     }
-                }
             });
+        }
+        else {
+            Toasty.error(Home_Page.this, "User Doesn't Exists" , Toast.LENGTH_SHORT, true).show();
+        }
+
     }
 }

@@ -36,12 +36,11 @@
     </LinearLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/etUserName"
-        style="@style/Widget.Material3.TextInputEditText.FilledBox"
+        android:id="@+id/etEmail"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         android:hint="Enter Your Email"
         android:minHeight="70dp"
@@ -53,19 +52,16 @@
         app:startIconDrawable="@drawable/email">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/userName"
+            android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
             android:maxHeight="88dp"
-            android:minHeight="70dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textSize="18sp" />
+            android:minHeight="70dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/etPassword"
-        style="@style/Widget.Material3.TextInputEditText.FilledBox"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginStart="32dp"
@@ -87,10 +83,12 @@
             android:layout_height="wrap_content"
             android:maxHeight="88dp"
             android:minHeight="70dp"
+            android:inputType="textPassword"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textSize="18sp" />
-
+            android:textSize="18sp"/>
     </com.google.android.material.textfield.TextInputLayout>
+
+
 
     <TextView
         android:id="@+id/forget"

@@ -21,4 +21,5 @@
     <string name="secondaryTitle">Lorem ipsum dolor sit amet consectetur adipisicing elit.</string>
     <string name="inputAddress">Enter Street Address</string>
     <string name="enterAddress">Enter Your Address</string>
+    <string name="plusButton" />
 </resources>

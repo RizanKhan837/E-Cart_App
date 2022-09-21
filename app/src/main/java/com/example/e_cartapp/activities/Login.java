@@ -1,8 +1,12 @@
 package com.example.e_cartapp.activities;
 
+import static com.example.e_cartapp.activities.SignUp_Page.USER_ID;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,10 +29,10 @@ public class Login extends AppCompatActivity {
     ActivityLoginBinding binding;
     FirebaseAuth auth;
     FirebaseUser mUser;
-    String useremail, userpassword;
+    String id, userpassword;
     FirebaseDatabase database;
     LoadingDialog loading;
-    UserModel userModel;
+    String email, password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,17 @@ public class Login extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         mUser = auth.getCurrentUser();
         database = FirebaseDatabase.getInstance();
+
+        SharedPreferences preferences = getSharedPreferences(USER_ID, MODE_PRIVATE);
+        email = preferences.getString("email", null);
+        password = preferences.getString("password", null);
+
+        if (!email.isEmpty() && !password.isEmpty()){
+            binding.email.setText(email);
+            binding.password.setText(password);
+        }
+
+
 
         loading = new LoadingDialog(Login.this, "Signing In");
 
@@ -59,7 +74,7 @@ public class Login extends AppCompatActivity {
     }
 
     private void login() {
-        if (TextUtils.isEmpty(binding.userName.getText())) {
+        if (TextUtils.isEmpty(binding.email.getText())) {
             Toasty.warning(Login.this, "Please enter your email!", Toast.LENGTH_SHORT, true).show();
             return;
         }
@@ -72,16 +87,18 @@ public class Login extends AppCompatActivity {
             return;
         }
         loading.show();
-        auth.signInWithEmailAndPassword(binding.userName.getText().toString(), binding.password.getText().toString())
+        auth.signInWithEmailAndPassword(binding.email.getText().toString(), binding.password.getText().toString())
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toasty.success(Login.this, "Logged In Successfully!", Toast.LENGTH_SHORT, true).show();
                             Intent intent = new Intent(Login.this, Home_Page.class);
-                            intent.putExtra("username", task.getResult().getUser().getDisplayName());
-                            intent.putExtra("email", task.getResult().getUser().getEmail());
-                            intent.putExtra("uid", task.getResult().getUser().getUid());
+                            String id = task.getResult().getUser().getUid();
+                            SharedPreferences.Editor sharedPreferences = getSharedPreferences(USER_ID, MODE_PRIVATE).edit();
+                            sharedPreferences.putString("id", id);
+                            sharedPreferences.apply();
+                            //Toasty.warning(Login.this, ""+ task.getResult().getUser().getUid(), Toast.LENGTH_SHORT, true).show();
                             startActivity(intent);
                             loading.dismiss();
                         } else {
