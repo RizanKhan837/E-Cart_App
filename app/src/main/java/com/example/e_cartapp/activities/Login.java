@@ -6,14 +6,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.e_cartapp.databinding.ActivityLoginBinding;
-import com.example.e_cartapp.model.UserModel;
 import com.example.e_cartapp.utils.GoogleSignin;
 import com.example.e_cartapp.utils.LoadingDialog;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,7 +27,7 @@ public class Login extends AppCompatActivity {
     ActivityLoginBinding binding;
     FirebaseAuth auth;
     FirebaseUser mUser;
-    String id, userpassword;
+    String id;
     FirebaseDatabase database;
     LoadingDialog loading;
     String email, password;
@@ -45,15 +43,12 @@ public class Login extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
 
         SharedPreferences preferences = getSharedPreferences(USER_ID, MODE_PRIVATE);
+
         email = preferences.getString("email", null);
         password = preferences.getString("password", null);
 
-        if (!email.isEmpty() && !password.isEmpty()){
-            binding.email.setText(email);
-            binding.password.setText(password);
-        }
-
-
+        binding.email.setText(email);
+        binding.password.setText(password);
 
         loading = new LoadingDialog(Login.this, "Signing In");
 
@@ -87,6 +82,7 @@ public class Login extends AppCompatActivity {
             return;
         }
         loading.show();
+
         auth.signInWithEmailAndPassword(binding.email.getText().toString(), binding.password.getText().toString())
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override

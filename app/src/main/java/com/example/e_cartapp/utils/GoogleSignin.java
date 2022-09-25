@@ -56,10 +56,6 @@ public class GoogleSignin extends Login {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
-        if (currentUser!= null){
-            startActivity(new Intent(GoogleSignin.this, Home_Page.class));
-        }
-
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);

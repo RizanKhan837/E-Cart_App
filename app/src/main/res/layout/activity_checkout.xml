@@ -117,6 +117,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/userName"
+                        android:hint="@string/inputName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"
@@ -142,13 +143,14 @@
                     app:startIconDrawable="@drawable/email">
 
                 <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/email"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress"
-                        android:maxHeight="80dp"
-                        android:minHeight="70dp"
-                        android:textSize="18sp" />
+                    android:id="@+id/email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/inputEmail"
+                    android:inputType="textEmailAddress"
+                    android:maxHeight="80dp"
+                    android:minHeight="70dp"
+                    android:textSize="18sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -168,13 +170,14 @@
                     app:startIconDrawable="@drawable/phone">
 
                 <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/phoneNo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="phone"
-                        android:maxHeight="80dp"
-                        android:minHeight="70dp"
-                        android:textSize="18sp" />
+                    android:id="@+id/phoneNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"
+                    android:hint="@string/inputPhoneNo"
+                    android:maxHeight="80dp"
+                    android:minHeight="70dp"
+                    android:textSize="18sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -194,13 +197,14 @@
                     app:startIconDrawable="@drawable/address">
 
                 <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/address"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textMultiLine"
-                        android:maxHeight="80dp"
-                        android:minHeight="70dp"
-                        android:textSize="18sp" />
+                    android:id="@+id/address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:hint="@string/inputAddress"
+                    android:maxHeight="80dp"
+                    android:minHeight="70dp"
+                    android:textSize="18sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -220,13 +224,14 @@
                     app:startIconDrawable="@drawable/date">
 
                 <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/shippingDate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="date"
-                        android:maxHeight="80dp"
-                        android:minHeight="70dp"
-                        android:textSize="18sp" />
+                    android:id="@+id/shippingDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:hint="Enter Shipping Date"
+                    android:maxHeight="80dp"
+                    android:minHeight="70dp"
+                    android:textSize="18sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -246,13 +251,14 @@
                     app:startIconDrawable="@drawable/comment">
 
                 <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/comments"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textAutoComplete"
-                        android:maxHeight="80dp"
-                        android:minHeight="70dp"
-                        android:textSize="18sp" />
+                    android:id="@+id/comments"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textAutoComplete"
+                    android:maxHeight="80dp"
+                    android:hint="Enter Your Comments"
+                    android:minHeight="70dp"
+                    android:textSize="18sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>

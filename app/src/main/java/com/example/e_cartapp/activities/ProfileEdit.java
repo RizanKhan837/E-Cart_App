@@ -2,6 +2,9 @@ package com.example.e_cartapp.activities;
 
 import static com.example.e_cartapp.activities.SignUp_Page.USER_ID;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -75,17 +78,38 @@ public class ProfileEdit extends AppCompatActivity {
             Toasty.warning(ProfileEdit.this, "Please enter city name!", Toast.LENGTH_SHORT, true).show();
             return;
         } else {
-            userModel = new UserModel(
-                    binding.userName.getText().toString(),
-                    binding.email.getText().toString(),
-                    binding.phoneNo.getText().toString(),
-                    binding.address.getText().toString(),
-                    binding.city.getText().toString(),
-                    binding.country.getText().toString(),
-                    null
-            );
-            database.getReference("Users").child(id).setValue(userModel);
-            Toasty.success(ProfileEdit.this, "Editing Successful", Toast.LENGTH_SHORT, true).show();
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which){
+                        case DialogInterface.BUTTON_POSITIVE:
+                            //Yes button clicked
+                            userModel = new UserModel(
+                                    binding.userName.getText().toString(),
+                                    binding.email.getText().toString(),
+                                    binding.phoneNo.getText().toString(),
+                                    binding.address.getText().toString(),
+                                    binding.city.getText().toString(),
+                                    binding.country.getText().toString(),
+                                    userModel.getProfileUrl()
+                            );
+                            database.getReference("Users").child(id).setValue(userModel);
+                            Toasty.success(ProfileEdit.this, "Editing Successful", Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(ProfileEdit.this, Profile.class));
+                            break;
+
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            //No button clicked
+                            break;
+                    }
+                }
+            };
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
+                    .setNegativeButton("No", dialogClickListener).show();
+
+
         }
     }
 }
