@@ -2,23 +2,41 @@ package com.example.e_cartapp.activities;
 
 import static com.example.e_cartapp.activities.SignUp_Page.USER_ID;
 
+import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.e_cartapp.databinding.ActivityProfileBinding;
 import com.example.e_cartapp.model.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
+
+import java.io.InputStream;
 
 import es.dmoral.toasty.Toasty;
 
@@ -27,8 +45,9 @@ public class Profile extends AppCompatActivity {
     ActivityProfileBinding binding;
     String id, personEmail;
     FirebaseDatabase database;
-    Uri personPhoto;
+    Uri personPhoto, filepath;
     UserModel userModel;
+    Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +74,35 @@ public class Profile extends AppCompatActivity {
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                startActivity(new Intent(Profile.this, Home_Page.class));
             }
         });
 
+        binding.browse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                Dexter.withActivity(Profile.this)
+                        .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                        .withListener(new PermissionListener() {
+                            @Override
+                            public void onPermissionGranted(PermissionGrantedResponse response){
+                                Intent intent=new Intent(Intent.ACTION_PICK);
+                                intent.setType("image/*");
+                                startActivityForResult(Intent.createChooser(intent,"Please select Image"),1);
+                                uploadtofirebase();
+                            }
 
+                            @Override
+                            public void onPermissionDenied(PermissionDeniedResponse response) {
+                            }
+
+                            @Override
+                            public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                                token.continuePermissionRequest();
+                            }
+                        }).check();
+            }
+        });
         /*binding.bubbleTabBar.addBubbleListener(new OnBubbleClickListener() {
             @Override
             public void onBubbleClick(int i) {
@@ -77,6 +120,26 @@ public class Profile extends AppCompatActivity {
                 }
             }
         });*/
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+    {
+        if(requestCode==1 && resultCode==RESULT_OK)
+        {
+            filepath = data.getData();
+            try
+            {
+                InputStream inputStream=getContentResolver().openInputStream(filepath);
+                bitmap= BitmapFactory.decodeStream(inputStream);
+                binding.profileImage.setImageBitmap(bitmap);
+                userModel.setProfileUrl(filepath);
+            }catch (Exception ex)
+            {
+                Toasty.error(Profile.this, "" + ex.getMessage(), Toast.LENGTH_SHORT, true).show();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     void getFirebaseDatabase() {
@@ -120,5 +183,31 @@ public class Profile extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void uploadtofirebase(){
+        final ProgressDialog dialog=new ProgressDialog(this);
+        dialog.setTitle("File Uploader");
+        dialog.show();
+
+        FirebaseStorage storage=FirebaseStorage.getInstance();
+        StorageReference uploader=storage.getReference().child(id);
+        uploader.putFile(filepath)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
+                {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot){
+                        dialog.dismiss();
+                        Toasty.success(Profile.this, "File Uploaded", Toast.LENGTH_SHORT, true).show();
+                    }
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot)
+                    {
+                        float percent=(100*taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount();
+                        dialog.setMessage("Uploaded :"+(int)percent+" %");
+                    }
+                });
     }
 }

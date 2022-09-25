@@ -50,7 +50,9 @@ public class SignUp_Page extends AppCompatActivity {
             createUsers();
         });
         binding.gotoSignin.setOnClickListener(v -> {
-            startActivity(new Intent(SignUp_Page.this, Login.class));
+            Toasty.info(SignUp_Page.this, "Go To Sign In", Toast.LENGTH_SHORT, true).show();
+            Intent intent = new Intent(getApplicationContext(), Login.class);
+            startActivity(intent);
         });
 
         binding.googleBtn.setOnClickListener(v -> {
@@ -102,7 +104,7 @@ public class SignUp_Page extends AppCompatActivity {
                     sharedPreferences.putString("id", id);
                     sharedPreferences.putString("email", binding.email.getText().toString());
                     sharedPreferences.putString("password", binding.password.getText().toString());
-                    sharedPreferences.apply();
+                    sharedPreferences.commit();
 
                     database.getReference("Users").child(id).setValue(userModel);
                     Toasty.success(SignUp_Page.this, "Registration Successful", Toast.LENGTH_SHORT, true).show();
