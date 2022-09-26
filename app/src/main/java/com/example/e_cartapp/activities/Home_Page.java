@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ import org.imaginativeworld.whynotimagecarousel.model.CarouselItem;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import es.dmoral.toasty.Toasty;
 
@@ -71,19 +73,18 @@ public class Home_Page extends AppCompatActivity implements Serializable { // to
         db = FirebaseFirestore.getInstance();
         database = FirebaseDatabase.getInstance();
 
-        SharedPreferences preferences = getSharedPreferences(USER_ID, MODE_PRIVATE);
-        id = preferences.getString("id", null);
-
         initCategories();
         initProducts();
         initSlider();
         googleSignIn();
         getFirebaseDatabase();
 
+        SharedPreferences preferences = getSharedPreferences(USER_ID, MODE_PRIVATE);
+        id = preferences.getString("id", null);
+
         binding.searchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
             @Override
             public void onSearchStateChanged(boolean enabled) {
-
             }
 
             @Override
@@ -329,15 +330,8 @@ public class Home_Page extends AppCompatActivity implements Serializable { // to
                         "Country",
                         acct.getPhotoUrl());
 
-            String id = acct.getId();
-
-            if (id != null){
-                SharedPreferences.Editor sharedPreferences = getSharedPreferences(USER_ID, MODE_PRIVATE).edit();
-
-                sharedPreferences.putString("id", id);
-                sharedPreferences.apply();
-            }
-            assert id != null;
+            //id = acct.getId().toLowerCase(Locale.ROOT);
+            Log.e("err", ""+id);
             database.getReference("Users").child(id).setValue(userModel);
 
             binding.profileName.setText(userModel.getName());
@@ -350,7 +344,6 @@ public class Home_Page extends AppCompatActivity implements Serializable { // to
     }
 
     void getFirebaseDatabase() {
-        if (id!=null){
             database.getReference("Users").child(id)
                     .get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
@@ -377,10 +370,5 @@ public class Home_Page extends AppCompatActivity implements Serializable { // to
                         }
                     }
             });
-        }
-        else {
-            Toasty.error(Home_Page.this, "User Doesn't Exists" , Toast.LENGTH_SHORT, true).show();
-        }
-
     }
 }
