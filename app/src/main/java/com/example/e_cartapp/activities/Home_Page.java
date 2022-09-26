@@ -73,14 +73,15 @@ public class Home_Page extends AppCompatActivity implements Serializable { // to
         db = FirebaseFirestore.getInstance();
         database = FirebaseDatabase.getInstance();
 
+        SharedPreferences preferences = getSharedPreferences(USER_ID, MODE_PRIVATE);
+        id = preferences.getString("id", null);
+
         initCategories();
         initProducts();
         initSlider();
         googleSignIn();
         getFirebaseDatabase();
 
-        SharedPreferences preferences = getSharedPreferences(USER_ID, MODE_PRIVATE);
-        id = preferences.getString("id", null);
 
         binding.searchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
             @Override
@@ -321,18 +322,18 @@ public class Home_Page extends AppCompatActivity implements Serializable { // to
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
         if (acct != null) {
-                userModel = new UserModel(
-                        acct.getDisplayName(),
-                        acct.getEmail(),
-                        "+XX XXX XXXXXXX",
-                        "House # 1234 Your Town Etc",
-                        "City",
-                        "Country",
-                        acct.getPhotoUrl());
+            userModel = new UserModel(
+                    acct.getDisplayName(),
+                    acct.getEmail(),
+                    "+XX XXX XXXXXXX",
+                    "House # 1234 Your Town Etc",
+                    "City",
+                    "Country",
+                    acct.getPhotoUrl());
 
-            //id = acct.getId().toLowerCase(Locale.ROOT);
-            Log.e("err", ""+id);
-            database.getReference("Users").child(id).setValue(userModel);
+            String id2 = acct.getId();
+            Toasty.info(Home_Page.this, "" + id2, Toast.LENGTH_SHORT, true).show();
+            database.getReference("Users").child("id" + id2).setValue(userModel);
 
             binding.profileName.setText(userModel.getName());
             binding.profileEmail.setText(userModel.getEmail());
@@ -344,31 +345,34 @@ public class Home_Page extends AppCompatActivity implements Serializable { // to
     }
 
     void getFirebaseDatabase() {
+        if (id != null) {
             database.getReference("Users").child(id)
                     .get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DataSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            if (task.getResult().exists()) {
-                                DataSnapshot dataSnapshot = task.getResult();
-                                userModel = dataSnapshot.getValue(UserModel.class);
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                if (task.getResult().exists()) {
+                                    DataSnapshot dataSnapshot = task.getResult();
+                                    userModel = dataSnapshot.getValue(UserModel.class);
 
-                                binding.profileName.setText(userModel.getName());
-                                binding.profileEmail.setText(userModel.getEmail());
+                                    binding.profileName.setText(userModel.getName());
+                                    binding.profileEmail.setText(userModel.getEmail());
 
-                                if (userModel.getProfileUrl() != null){
-                                    Glide.with(Home_Page.this)
-                                            .load(String.valueOf(userModel.getProfileUrl()))
-                                            .into(binding.profileImage);
+                                    if (userModel.getProfileUrl() != null) {
+                                        Glide.with(Home_Page.this)
+                                                .load(String.valueOf(userModel.getProfileUrl()))
+                                                .into(binding.profileImage);
+                                    }
+
+                                } else {
+                                    Toasty.error(Home_Page.this, "" + task.getException().getMessage(), Toast.LENGTH_SHORT, true).show();
                                 }
-
                             } else {
                                 Toasty.error(Home_Page.this, "" + task.getException().getMessage(), Toast.LENGTH_SHORT, true).show();
                             }
-                        } else {
-                            Toasty.error(Home_Page.this, "" + task.getException().getMessage(), Toast.LENGTH_SHORT, true).show();
                         }
-                    }
-            });
+                    });
+        }
+
     }
 }

@@ -5,6 +5,7 @@ import static com.example.e_cartapp.activities.SignUp_Page.USER_ID;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -96,10 +97,14 @@ public class GoogleSignin extends Login {
                     // Sign in success, update UI with the signed-in user's information
                     FirebaseUser user = mAuth.getCurrentUser();
 
-                    id = task.getResult().getUser().getUid();
+                    assert user != null;
+                    id = user.getUid();
+
+                    Toasty.success(GoogleSignin.this, ""+id, Toast.LENGTH_SHORT, true).show();
 
                     SharedPreferences.Editor sharedPreferences = getSharedPreferences(USER_ID, MODE_PRIVATE).edit();
-                    sharedPreferences.putString("id", id);
+
+                    sharedPreferences.putString("id", user.getUid());
                     sharedPreferences.commit();
 
                     Intent intent = new Intent(GoogleSignin.this, Home_Page.class);

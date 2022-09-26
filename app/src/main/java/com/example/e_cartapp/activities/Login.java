@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -65,6 +66,13 @@ public class Login extends AppCompatActivity {
         });
         binding.googleBtn.setOnClickListener(v -> {
             startActivity(new Intent(Login.this, GoogleSignin.class));
+        });
+
+        binding.gotoSignup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Login.this, SignUp_Page.class));
+            }
         });
     }
 
