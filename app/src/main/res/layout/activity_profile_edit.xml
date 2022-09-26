@@ -271,14 +271,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/cancel"
-                    android:layout_width="180dp"
+                    android:layout_width="170dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
                     android:background="@drawable/cancel"
                     android:text="Cancel"
                     android:textColor="@color/orange"
@@ -288,9 +289,8 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/saveBtn"
-                    android:layout_width="180dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end"
                     android:layout_marginStart="16dp"
                     android:background="@drawable/addtocart"
                     android:text="Save"

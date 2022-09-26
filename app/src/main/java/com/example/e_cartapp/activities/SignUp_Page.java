@@ -50,7 +50,6 @@ public class SignUp_Page extends AppCompatActivity {
             createUsers();
         });
         binding.gotoSignin.setOnClickListener(v -> {
-            Toasty.info(SignUp_Page.this, "Go To Sign In", Toast.LENGTH_SHORT, true).show();
             Intent intent = new Intent(getApplicationContext(), Login.class);
             startActivity(intent);
         });

@@ -101,7 +101,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/inputPhone"
-                    android:inputType="textEmailAddress"
+                    android:inputType="phone"
                     android:maxHeight="70dp"
                     android:minHeight="60dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -194,7 +194,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginBottom="4dp"
                 android:gravity="center"
                 android:orientation="horizontal">
