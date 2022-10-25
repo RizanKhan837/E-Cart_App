@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -40,7 +39,6 @@ import org.imaginativeworld.whynotimagecarousel.model.CarouselItem;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Locale;
 
 import es.dmoral.toasty.Toasty;
 
@@ -333,7 +331,7 @@ public class Home_Page extends AppCompatActivity implements Serializable { // to
 
             String id2 = acct.getId();
             Toasty.info(Home_Page.this, "" + id2, Toast.LENGTH_SHORT, true).show();
-            database.getReference("Users").child("id" + id2).setValue(userModel);
+            database.getReference("Users").child("id" + id).setValue(userModel);
 
             binding.profileName.setText(userModel.getName());
             binding.profileEmail.setText(userModel.getEmail());

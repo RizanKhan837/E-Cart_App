@@ -45,7 +45,7 @@ public class Profile extends AppCompatActivity {
     ActivityProfileBinding binding;
     String id, personEmail;
     FirebaseDatabase database;
-    Uri personPhoto, filepath;
+    Uri filepath;
     UserModel userModel;
     Bitmap bitmap;
 
@@ -94,6 +94,7 @@ public class Profile extends AppCompatActivity {
 
                             @Override
                             public void onPermissionDenied(PermissionDeniedResponse response) {
+
                             }
 
                             @Override
@@ -127,13 +128,17 @@ public class Profile extends AppCompatActivity {
     {
         if(requestCode==1 && resultCode==RESULT_OK)
         {
+            assert data != null;
             filepath = data.getData();
             try
             {
-                InputStream inputStream=getContentResolver().openInputStream(filepath);
-                bitmap= BitmapFactory.decodeStream(inputStream);
+                InputStream inputStream = getContentResolver().openInputStream(filepath);
+                bitmap = BitmapFactory.decodeStream(inputStream);
                 binding.profileImage.setImageBitmap(bitmap);
                 userModel.setProfileUrl(filepath);
+                Glide.with(Profile.this)
+                        .load(String.valueOf(filepath))
+                        .into(binding.profileImage);
             }catch (Exception ex)
             {
                 Toasty.error(Profile.this, "" + ex.getMessage(), Toast.LENGTH_SHORT, true).show();
