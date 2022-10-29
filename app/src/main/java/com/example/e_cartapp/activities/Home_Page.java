@@ -71,14 +71,11 @@ public class Home_Page extends AppCompatActivity implements Serializable { // to
         db = FirebaseFirestore.getInstance();
         database = FirebaseDatabase.getInstance();
 
-        SharedPreferences preferences = getSharedPreferences(USER_ID, MODE_PRIVATE);
-        id = preferences.getString("id", null);
-
         initCategories();
         initProducts();
         initSlider();
-        googleSignIn();
         getFirebaseDatabase();
+        googleSignIn();
 
 
         binding.searchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
@@ -124,7 +121,8 @@ public class Home_Page extends AppCompatActivity implements Serializable { // to
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Home_Page.this, Profile.class);
-                intent.putExtra("username", userModel.getName());
+                //intent.putExtra("username", userModel.getName());
+                intent.putExtra("userModel", userModel);
                 startActivity(intent);
             }
         });
@@ -329,9 +327,9 @@ public class Home_Page extends AppCompatActivity implements Serializable { // to
                     "Country",
                     acct.getPhotoUrl());
 
-            String id2 = acct.getId();
-            Toasty.info(Home_Page.this, "" + id2, Toast.LENGTH_SHORT, true).show();
-            database.getReference("Users").child("id" + id).setValue(userModel);
+
+            Toasty.info(Home_Page.this, "" + id, Toast.LENGTH_SHORT, true).show();
+            //database.getReference("Users").child(id).setValue(userModel);
 
             binding.profileName.setText(userModel.getName());
             binding.profileEmail.setText(userModel.getEmail());

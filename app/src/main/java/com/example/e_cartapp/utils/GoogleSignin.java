@@ -74,7 +74,6 @@ public class GoogleSignin extends Login {
                  account = GoogleSignIn.getLastSignedInAccount(this);
                 firebaseAuthWithGoogle(account.getIdToken());
 
-
                 //startActivity(new Intent(GoogleSignin.this, Home_Page.class));
                 //Toasty.success(GoogleSignin.this, "Success!", Toast.LENGTH_SHORT, true).show();
                 loadingDialog.dismiss();
@@ -97,6 +96,7 @@ public class GoogleSignin extends Login {
                     id = task.getResult().getUser().getUid();
                     sharedPreferences.putString("id", id);
                     sharedPreferences.commit();
+
                     Toasty.success(GoogleSignin.this, "" +id, Toast.LENGTH_SHORT, true).show();
 
                     Intent intent = new Intent(GoogleSignin.this, Home_Page.class);

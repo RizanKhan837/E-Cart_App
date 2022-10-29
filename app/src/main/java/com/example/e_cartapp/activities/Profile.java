@@ -58,6 +58,7 @@ public class Profile extends AppCompatActivity {
 
         SharedPreferences preferences = getSharedPreferences(USER_ID, MODE_PRIVATE);
         id = preferences.getString("id", null);
+        userModel = getIntent().getExtras().getParcelable("userModel");
 
         getFirebaseDatabase();
 
@@ -89,7 +90,7 @@ public class Profile extends AppCompatActivity {
                                 Intent intent=new Intent(Intent.ACTION_PICK);
                                 intent.setType("image/*");
                                 startActivityForResult(Intent.createChooser(intent,"Please select Image"),1);
-                                uploadtofirebase();
+                               uploadtofirebase();
                             }
 
                             @Override
@@ -104,44 +105,28 @@ public class Profile extends AppCompatActivity {
                         }).check();
             }
         });
-        /*binding.bubbleTabBar.addBubbleListener(new OnBubbleClickListener() {
-            @Override
-            public void onBubbleClick(int i) {
-                switch (i){
-                    case 0:
-                    case 1:
-                        startActivity(new Intent(Profile.this, Home_Page.class));
-                        break;
-                    case 2:
-                        startActivity(new Intent(Profile.this, CartActivity.class));
-                        break;
-                    case 3:
-                        startActivity(new Intent(Profile.this, Profile.class));
-                        break;
-                }
-            }
-        });*/
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
     {
-        if(requestCode==1 && resultCode==RESULT_OK)
+        if(requestCode==1 && resultCode==RESULT_OK && data != null && data.getData() != null)
         {
-            assert data != null;
             filepath = data.getData();
             try
             {
                 InputStream inputStream = getContentResolver().openInputStream(filepath);
                 bitmap = BitmapFactory.decodeStream(inputStream);
                 binding.profileImage.setImageBitmap(bitmap);
+                userModel = new UserModel();
                 userModel.setProfileUrl(filepath);
                 Glide.with(Profile.this)
                         .load(String.valueOf(filepath))
                         .into(binding.profileImage);
             }catch (Exception ex)
             {
-                Toasty.error(Profile.this, "" + ex.getMessage(), Toast.LENGTH_SHORT, true).show();
+                //Toasty.info(Profile.this, "" + filepath, Toast.LENGTH_SHORT, true).show();
+                Toasty.error(Profile.this, "Problem Is Here" + ex.getMessage(), Toast.LENGTH_LONG, true).show();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -153,9 +138,11 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
+
                     if (task.getResult().exists()) {
                         DataSnapshot dataSnapshot = task.getResult();
                         userModel = dataSnapshot.getValue(UserModel.class);
+
                         if (!userModel.getName().isEmpty()){
                             binding.profileName.setText(userModel.getName());
                         }

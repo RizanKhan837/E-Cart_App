@@ -69,11 +69,11 @@
             android:exported="false"
             android:theme="@style/Theme.ECartApp" />
         <activity
-            android:name=".activities.Home_Page"
+            android:name=".activities.SignUp_Page"
             android:exported="false"
             android:theme="@style/Theme.ECartApp" />
         <activity
-            android:name=".activities.SignUp_Page"
+            android:name=".activities.Home_Page"
             android:exported="true"
             android:theme="@style/Theme.ECartApp">
             <intent-filter>
