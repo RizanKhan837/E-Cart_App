@@ -4,13 +4,17 @@ import static com.example.e_cartapp.activities.SignUp_Page.USER_ID;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,9 +25,11 @@ import com.bumptech.glide.Glide;
 import com.example.e_cartapp.databinding.ActivityProfileBinding;
 import com.example.e_cartapp.model.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -48,17 +54,26 @@ public class Profile extends AppCompatActivity {
     Uri filepath;
     UserModel userModel;
     Bitmap bitmap;
+    FirebaseStorage mstorageRef;
+
+    private StorageReference mStorageRef;
+    private DatabaseReference mDatabaseRef;
+    private static final int PICK_IMAGE_REQUEST = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityProfileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        database = FirebaseDatabase.getInstance();
 
         SharedPreferences preferences = getSharedPreferences(USER_ID, MODE_PRIVATE);
         id = preferences.getString("id", null);
         userModel = getIntent().getExtras().getParcelable("userModel");
+
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("Users").child(id);
+        mstorageRef = FirebaseStorage.getInstance();
 
         getFirebaseDatabase();
 
@@ -87,10 +102,9 @@ public class Profile extends AppCompatActivity {
                         .withListener(new PermissionListener() {
                             @Override
                             public void onPermissionGranted(PermissionGrantedResponse response){
-                                Intent intent=new Intent(Intent.ACTION_PICK);
-                                intent.setType("image/*");
-                                startActivityForResult(Intent.createChooser(intent,"Please select Image"),1);
-                               uploadtofirebase();
+                                openFileChooser();
+                                uploadFile();
+                                Log.e("err", "Running");
                             }
 
                             @Override
@@ -131,10 +145,21 @@ public class Profile extends AppCompatActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+    private void openFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+    private String getFileExtension(Uri uri) {
+        ContentResolver cR = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
 
     void getFirebaseDatabase() {
-        database.getReference("Users").child(id)
-                .get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        mDatabaseRef.get()
+                .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
@@ -175,6 +200,65 @@ public class Profile extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void uploadFile() {
+        final ProgressDialog mProgressBar = new ProgressDialog(this);
+        Toasty.error(Profile.this, "Upload Method Run" , Toast.LENGTH_SHORT, true).show();
+        Log.e("err", "Running");
+
+        if (filepath != null) {
+            StorageReference fileReference = mStorageRef.child("uploads/"+System.currentTimeMillis()
+                    + "." + getFileExtension(filepath));
+            Toasty.error(Profile.this, "Upload Method Not Running" , Toast.LENGTH_SHORT, true).show();
+
+            Log.e("err", " Not Running");
+
+
+            fileReference.putFile(filepath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mProgressBar.setProgress(0);
+                                }
+                            }, 500);
+
+                            mProgressBar.dismiss();
+                            Toasty.success(Profile.this, "File Uploaded", Toast.LENGTH_SHORT, true).show();
+
+                            fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    final Uri downloadUrl = uri;
+                                    userModel.setProfileUrl(downloadUrl);
+                                    Toasty.success(Profile.this, "File Uploaded" + downloadUrl, Toast.LENGTH_SHORT, true).show();
+
+                                }
+                            });
+                            //String uploadId = mDatabaseRef.push().getKey();
+                            mDatabaseRef.child(id).setValue(userModel);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toasty.error(Profile.this, ""+e.getMessage(), Toast.LENGTH_SHORT, true).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                            mProgressBar.setProgress((int) progress);
+                        }
+                    });
+        } else {
+            Toasty.warning(Profile.this, "No File Selected", Toast.LENGTH_SHORT, true).show();
+        }
     }
 
     private void uploadtofirebase(){
