@@ -14,6 +14,7 @@ import com.example.e_cartapp.R;
 import com.example.e_cartapp.activities.Home_Page;
 import com.example.e_cartapp.activities.Login;
 import com.example.e_cartapp.databinding.ActivityGoogleSigninBinding;
+import com.example.e_cartapp.model.UserModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -28,9 +29,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.Serializable;
+
 import es.dmoral.toasty.Toasty;
 
-public class GoogleSignin extends Login {
+public class GoogleSignin extends Login implements Serializable {
 
     ActivityGoogleSigninBinding binding;
     private static final int RC_SIGN_IN = 101;
@@ -39,6 +42,7 @@ public class GoogleSignin extends Login {
     FirebaseUser currentUser;
     FirebaseDatabase database;
     LoadingDialog loadingDialog;
+    UserModel userModel;
     String id;
 
     @Override
@@ -55,6 +59,7 @@ public class GoogleSignin extends Login {
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
+
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
@@ -78,7 +83,7 @@ public class GoogleSignin extends Login {
                 //Toasty.success(GoogleSignin.this, "Success!", Toast.LENGTH_SHORT, true).show();
                 loadingDialog.dismiss();
             } catch (ApiException e) {
-                Toasty.error(GoogleSignin.this, "" + e.getMessage(), Toast.LENGTH_SHORT, true).show();
+                //Toasty.error(GoogleSignin.this, "" + e.getMessage(), Toast.LENGTH_SHORT, true).show();
                 finish();
                 loadingDialog.dismiss();
             }
@@ -97,11 +102,21 @@ public class GoogleSignin extends Login {
                     sharedPreferences.putString("id", id);
                     sharedPreferences.commit();
 
-                    Toasty.success(GoogleSignin.this, "" +id, Toast.LENGTH_SHORT, true).show();
-
-                    Intent intent = new Intent(GoogleSignin.this, Home_Page.class);
-                    startActivity(intent);
-                    Toasty.success(GoogleSignin.this, "Success!", Toast.LENGTH_SHORT, true).show();
+                    //Toasty.success(GoogleSignin.this, "" +id, Toast.LENGTH_SHORT, true).show();
+                    if (task.getResult().getUser() != null) {
+                        userModel = new UserModel(
+                                task.getResult().getUser().getDisplayName(),
+                                task.getResult().getUser().getEmail(),
+                                task.getResult().getUser().getPhoneNumber(),
+                                "House # 1234 Your Town Etc",
+                                "City",
+                                "Country",
+                                task.getResult().getUser().getPhotoUrl());
+                        Intent intent = new Intent(GoogleSignin.this, Home_Page.class);
+                        //intent.putExtra("userModel", userModel);
+                        Toasty.success(GoogleSignin.this, "Success!", Toast.LENGTH_SHORT, true).show();
+                        startActivity(intent);
+                    }
                 } else {
                     // If sign in fails, display a message to the user.
                     Toasty.warning(GoogleSignin.this, "" + task.getException().getMessage(), Toast.LENGTH_SHORT, true).show();

@@ -54,7 +54,7 @@ public class Home_Page extends AppCompatActivity implements Serializable { // to
 
     PopularAdapter productAdapter;
     ArrayList<PopularProducts> products;
-    UserModel userModel;
+    public UserModel userModel;
     String id, userName, personPhone;
     Uri personPhoto;
    // BottomNavigationView bottomNavigationView;
@@ -65,18 +65,28 @@ public class Home_Page extends AppCompatActivity implements Serializable { // to
         binding = ActivityHomePageBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());   // // is used fill the window with the UI provided from layout file
 
-
+        SharedPreferences preferences = getSharedPreferences(USER_ID, MODE_PRIVATE);
+        id = preferences.getString("id", null);
         //bottomNavigationView = (BottomNavigationView) binding.bubbleTabBar.getRootView();
+
+        personPhoto = getIntent().getData();
+
+        if (personPhoto != null){
+            Glide.with(this)
+                    .load(String.valueOf(personPhoto))
+                    .into(binding.profileImage);
+        }
 
         db = FirebaseFirestore.getInstance();
         database = FirebaseDatabase.getInstance();
+
+        //userModel = (UserModel) getIntent().getSerializableExtra("userModel");
 
         initCategories();
         initProducts();
         initSlider();
         getFirebaseDatabase();
         googleSignIn();
-
 
         binding.searchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
             @Override
@@ -121,8 +131,7 @@ public class Home_Page extends AppCompatActivity implements Serializable { // to
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Home_Page.this, Profile.class);
-                //intent.putExtra("username", userModel.getName());
-                intent.putExtra("userModel", userModel);
+                //intent.putExtra("userModel", userModel);
                 startActivity(intent);
             }
         });
@@ -317,6 +326,7 @@ public class Home_Page extends AppCompatActivity implements Serializable { // to
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+
         if (acct != null) {
             userModel = new UserModel(
                     acct.getDisplayName(),
@@ -328,7 +338,7 @@ public class Home_Page extends AppCompatActivity implements Serializable { // to
                     acct.getPhotoUrl());
 
 
-            Toasty.info(Home_Page.this, "" + id, Toast.LENGTH_SHORT, true).show();
+            //Toasty.info(Home_Page.this, "" + id, Toast.LENGTH_SHORT, true).show();
             //database.getReference("Users").child(id).setValue(userModel);
 
             binding.profileName.setText(userModel.getName());

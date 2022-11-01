@@ -43,18 +43,20 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.io.InputStream;
+import java.io.Serializable;
 
 import es.dmoral.toasty.Toasty;
 
-public class Profile extends AppCompatActivity {
+public class Profile extends AppCompatActivity implements Serializable {
 
     ActivityProfileBinding binding;
     String id, personEmail;
     FirebaseDatabase database;
-    Uri filepath;
+    public static Uri filepath;
     UserModel userModel;
     Bitmap bitmap;
     FirebaseStorage mstorageRef;
+    public Uri downloadUrl;
 
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
@@ -69,11 +71,12 @@ public class Profile extends AppCompatActivity {
 
         SharedPreferences preferences = getSharedPreferences(USER_ID, MODE_PRIVATE);
         id = preferences.getString("id", null);
-        userModel = getIntent().getExtras().getParcelable("userModel");
+        //userModel = (UserModel) getIntent().getSerializableExtra("userModel");
 
-        mStorageRef = FirebaseStorage.getInstance().getReference();
+        mStorageRef = FirebaseStorage.getInstance().getReference("Uploads");
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("Users").child(id);
         mstorageRef = FirebaseStorage.getInstance();
+
 
         getFirebaseDatabase();
 
@@ -90,7 +93,9 @@ public class Profile extends AppCompatActivity {
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Profile.this, Home_Page.class));
+                Intent intent = new Intent(Profile.this, Home_Page.class);
+                intent.putExtra("profileUrl", filepath);
+                startActivity(intent);
             }
         });
 
@@ -103,7 +108,6 @@ public class Profile extends AppCompatActivity {
                             @Override
                             public void onPermissionGranted(PermissionGrantedResponse response){
                                 openFileChooser();
-                                uploadFile();
                                 Log.e("err", "Running");
                             }
 
@@ -132,11 +136,10 @@ public class Profile extends AppCompatActivity {
                 InputStream inputStream = getContentResolver().openInputStream(filepath);
                 bitmap = BitmapFactory.decodeStream(inputStream);
                 binding.profileImage.setImageBitmap(bitmap);
-                userModel = new UserModel();
-                userModel.setProfileUrl(filepath);
                 Glide.with(Profile.this)
                         .load(String.valueOf(filepath))
                         .into(binding.profileImage);
+                uploadFile();
             }catch (Exception ex)
             {
                 //Toasty.info(Profile.this, "" + filepath, Toast.LENGTH_SHORT, true).show();
@@ -163,7 +166,6 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
-
                     if (task.getResult().exists()) {
                         DataSnapshot dataSnapshot = task.getResult();
                         userModel = dataSnapshot.getValue(UserModel.class);
@@ -173,6 +175,8 @@ public class Profile extends AppCompatActivity {
                         }
                         if (!userModel.getEmail().isEmpty()){
                             binding.email.setText(userModel.getEmail());
+                        }if (!userModel.getEmail().isEmpty()){
+                            binding.profileEmail.setText(userModel.getEmail());
                         }
                         if (userModel.getProfileUrl() != null){
                             Glide.with(Profile.this)
@@ -208,10 +212,9 @@ public class Profile extends AppCompatActivity {
         Log.e("err", "Running");
 
         if (filepath != null) {
-            StorageReference fileReference = mStorageRef.child("uploads/"+System.currentTimeMillis()
+            StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
                     + "." + getFileExtension(filepath));
             Toasty.error(Profile.this, "Upload Method Not Running" , Toast.LENGTH_SHORT, true).show();
-
             Log.e("err", " Not Running");
 
 
@@ -233,10 +236,9 @@ public class Profile extends AppCompatActivity {
                             fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    final Uri downloadUrl = uri;
+                                    downloadUrl = uri;
                                     userModel.setProfileUrl(downloadUrl);
                                     Toasty.success(Profile.this, "File Uploaded" + downloadUrl, Toast.LENGTH_SHORT, true).show();
-
                                 }
                             });
                             //String uploadId = mDatabaseRef.push().getKey();
