@@ -33,6 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import org.imaginativeworld.whynotimagecarousel.model.CarouselItem;
@@ -54,9 +55,8 @@ public class Home_Page extends AppCompatActivity implements Serializable { // to
 
     PopularAdapter productAdapter;
     ArrayList<PopularProducts> products;
-    public UserModel userModel;
     String id, userName, personPhone;
-    Uri personPhoto;
+    Uri profileUrl;
    // BottomNavigationView bottomNavigationView;
 
     @Override
@@ -68,14 +68,6 @@ public class Home_Page extends AppCompatActivity implements Serializable { // to
         SharedPreferences preferences = getSharedPreferences(USER_ID, MODE_PRIVATE);
         id = preferences.getString("id", null);
         //bottomNavigationView = (BottomNavigationView) binding.bubbleTabBar.getRootView();
-
-        personPhoto = getIntent().getData();
-
-        if (personPhoto != null){
-            Glide.with(this)
-                    .load(String.valueOf(personPhoto))
-                    .into(binding.profileImage);
-        }
 
         db = FirebaseFirestore.getInstance();
         database = FirebaseDatabase.getInstance();
@@ -328,14 +320,14 @@ public class Home_Page extends AppCompatActivity implements Serializable { // to
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
 
         if (acct != null) {
-            userModel = new UserModel(
+            UserModel userModel = new UserModel(
                     acct.getDisplayName(),
                     acct.getEmail(),
                     "+XX XXX XXXXXXX",
                     "House # 1234 Your Town Etc",
                     "City",
                     "Country",
-                    acct.getPhotoUrl());
+                    acct.getPhotoUrl().toString());
 
 
             //Toasty.info(Home_Page.this, "" + id, Toast.LENGTH_SHORT, true).show();
@@ -358,15 +350,17 @@ public class Home_Page extends AppCompatActivity implements Serializable { // to
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
                             if (task.isSuccessful()) {
                                 if (task.getResult().exists()) {
+
                                     DataSnapshot dataSnapshot = task.getResult();
-                                    userModel = dataSnapshot.getValue(UserModel.class);
+                                    UserModel userModel = dataSnapshot.getValue(UserModel.class);
 
                                     binding.profileName.setText(userModel.getName());
                                     binding.profileEmail.setText(userModel.getEmail());
 
                                     if (userModel.getProfileUrl() != null) {
+                                        profileUrl = Uri.parse(userModel.getProfileUrl());
                                         Glide.with(Home_Page.this)
-                                                .load(String.valueOf(userModel.getProfileUrl()))
+                                                .load(String.valueOf(profileUrl))
                                                 .into(binding.profileImage);
                                     }
 

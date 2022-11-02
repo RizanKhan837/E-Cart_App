@@ -111,7 +111,7 @@ public class GoogleSignin extends Login implements Serializable {
                                 "House # 1234 Your Town Etc",
                                 "City",
                                 "Country",
-                                task.getResult().getUser().getPhotoUrl());
+                                task.getResult().getUser().getPhotoUrl().toString());
                         Intent intent = new Intent(GoogleSignin.this, Home_Page.class);
                         //intent.putExtra("userModel", userModel);
                         Toasty.success(GoogleSignin.this, "Success!", Toast.LENGTH_SHORT, true).show();

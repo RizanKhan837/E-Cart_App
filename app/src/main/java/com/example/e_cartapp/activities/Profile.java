@@ -56,7 +56,7 @@ public class Profile extends AppCompatActivity implements Serializable {
     UserModel userModel;
     Bitmap bitmap;
     FirebaseStorage mstorageRef;
-    public Uri downloadUrl;
+    public Uri profileUrl;
 
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
@@ -75,8 +75,7 @@ public class Profile extends AppCompatActivity implements Serializable {
 
         mStorageRef = FirebaseStorage.getInstance().getReference("Uploads");
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("Users").child(id);
-        mstorageRef = FirebaseStorage.getInstance();
-
+        database = FirebaseDatabase.getInstance();
 
         getFirebaseDatabase();
 
@@ -179,8 +178,9 @@ public class Profile extends AppCompatActivity implements Serializable {
                             binding.profileEmail.setText(userModel.getEmail());
                         }
                         if (userModel.getProfileUrl() != null){
+                            profileUrl = Uri.parse(userModel.getProfileUrl());
                             Glide.with(Profile.this)
-                                    .load(String.valueOf(userModel.getProfileUrl()))
+                                    .load(String.valueOf(profileUrl))
                                     .into(binding.profileImage);
                         }
                         if (!userModel.getAddress().isEmpty()){
@@ -208,14 +208,14 @@ public class Profile extends AppCompatActivity implements Serializable {
 
     private void uploadFile() {
         final ProgressDialog mProgressBar = new ProgressDialog(this);
-        Toasty.error(Profile.this, "Upload Method Run" , Toast.LENGTH_SHORT, true).show();
+        //Toasty.error(Profile.this, "Upload Method Run" , Toast.LENGTH_SHORT, true).show();
         Log.e("err", "Running");
 
         if (filepath != null) {
             StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
                     + "." + getFileExtension(filepath));
-            Toasty.error(Profile.this, "Upload Method Not Running" , Toast.LENGTH_SHORT, true).show();
-            Log.e("err", " Not Running");
+            //Toasty.error(Profile.this, "Upload Method Not Running" , Toast.LENGTH_SHORT, true).show();
+            //Log.e("err", " Not Running");
 
 
             fileReference.putFile(filepath)
@@ -236,13 +236,12 @@ public class Profile extends AppCompatActivity implements Serializable {
                             fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    downloadUrl = uri;
-                                    userModel.setProfileUrl(downloadUrl);
-                                    Toasty.success(Profile.this, "File Uploaded" + downloadUrl, Toast.LENGTH_SHORT, true).show();
+                                    database.getReference("Users").child(id).child("profileUrl").setValue(uri.toString());
+                                    //userModel.setProfileUrl(downloadUrl);
+                                    Toasty.success(Profile.this, "File Uploaded", Toast.LENGTH_SHORT, true).show();
                                 }
                             });
                             //String uploadId = mDatabaseRef.push().getKey();
-                            mDatabaseRef.child(id).setValue(userModel);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {

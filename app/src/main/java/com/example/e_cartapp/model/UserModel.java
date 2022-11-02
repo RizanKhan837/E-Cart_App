@@ -5,12 +5,11 @@ import android.net.Uri;
 import java.io.Serializable;
 
 public class UserModel implements Serializable {
-    String name, email, password, phone, address, city, country, id;
-    Uri profileUrl;
+    String name, email, password, phone, address, city, country, id, profileUrl;
     //private static int num = 0;
 
     // Constructor
-    public UserModel(String name, String email, String phone, String address, String city, String country, Uri profileUrl) {
+    public UserModel(String name, String email, String phone, String address, String city, String country, String profileUrl) {
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -83,11 +82,11 @@ public class UserModel implements Serializable {
         this.id = id;
     }
 
-    public Uri getProfileUrl() {
+    public String getProfileUrl() {
         return profileUrl;
     }
 
-    public void setProfileUrl(Uri profileUrl) {
+    public void setProfileUrl(String profileUrl) {
         this.profileUrl = profileUrl;
     }
 }
