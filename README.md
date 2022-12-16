@@ -50,3 +50,16 @@ We welcome contributions to ECart! If you have a feature request or bug report, 
 Thank you for using ECart! We hope you have a great shopping experience.
 
 
+<<<<<<< HEAD
+
+## 🚀 About Me
+I am a student of Software Engineering at [Bahria University](https://www.linkedin.com/school/bahria-university/). I am an Android Developer. I am skilled in **Solidity**, **Java**, **Android Development**, **C#**, **Linux**, **Javascript** and **Excel**. I have a strong interest in ***Cyber-Security*** and ***Blockchain***. I am a quick learner and I am always keen to learn new programming languages and technologies.
+
+
+## 🔗 Links
+[![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://rizankhan.me/)
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/rizwanakram837/)
+[![twitter](https://img.shields.io/badge/twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/RizanKhan_837)
+
+=======
+>>>>>>> 6b6f90d254ed8a2b7ecc08c569d3ca8cc757ac3c
