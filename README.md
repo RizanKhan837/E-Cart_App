@@ -5,6 +5,7 @@ Welcome to ECart, the premier e-commerce Android app for buying and selling a wi
 
 ## Screenshots
 
+<img src="https://d33wubrfki0l68.cloudfront.net/3b45b0160e49801c8ee60c900b2d2fda529b5792/2db08/images/e_cartapp_22.jpg" width="760" height="1080" />
 ![Main Menu](https://d33wubrfki0l68.cloudfront.net/3b45b0160e49801c8ee60c900b2d2fda529b5792/2db08/images/e_cartapp_22.jpg)
 ![Login/Signup](https://d33wubrfki0l68.cloudfront.net/4f4fe7c7dc50402f616bfaeb7298608f98da47ae/c6504/images/ecartmockup_3.jpg)
 ![My Cart](https://d33wubrfki0l68.cloudfront.net/27af946116ee3a85bb093da8099194f2d2291989/d3568/images/ecartmockup_1.jpg)
